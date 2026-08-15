@@ -1,34 +1,39 @@
-# 105 — Quản lý object composition
+# 105. Quản lý object composition và lifecycle
 
-## Mục tiêu
+## Ownership và lifecycle
 
-Phối hợp nhiều component trong workflow deterministic, tránh Main biết chi tiết implementation.
+Một aggregate phải biết ai chịu trách nhiệm tạo, thay thế và đóng part. Nếu `PersonalComputer` tạo tất cả dependency bằng `new`, code nhanh lúc đầu nhưng khó thay hardware/test.
 
-## Mental model
+```java
+final class PersonalComputer {
+    private final ComputerCase computerCase;
+    private final Monitor monitor;
+    private final Motherboard motherboard;
+    PersonalComputer(ComputerCase computerCase, Monitor monitor, Motherboard motherboard) {
+        this.computerCase = Objects.requireNonNull(computerCase);
+        this.monitor = Objects.requireNonNull(monitor);
+        this.motherboard = Objects.requireNonNull(motherboard);
+    }
+    void powerUp() {
+        computerCase.pressPowerButton();
+        motherboard.loadProgram("OS");
+        monitor.turnOn();
+    }
+}
+```
 
-Composition orchestration nên gọi capability methods; không sửa field của component trực tiếp.
+Method `powerUp` là orchestration boundary. Caller không cần biết sequence chi tiết, nhưng sequence phải được test.
 
-## Ví dụ Java 17
+## Nếu part có state
 
-~~~java
-`interface Power { String on(); }\nfinal class Computer { private final Power power; String boot(){return power.on();} }`
-~~~
+State có thể thuộc aggregate nếu các part phải thay đổi atomically. Nếu monitor bật nhưng motherboard fail, cần policy rollback hoặc trạng thái `FAILED`; không nên giả vờ operation đã thành công.
 
-## Lỗi thường gặp
+## Bài tập
 
-- God object.
-- Order side effect không rõ.
-- Component leak state.
+Tạo fake parts ghi lại event, test `powerUp` đúng thứ tự. Thêm failure ở motherboard và quyết định monitor có được bật không.
 
-## Bài tập ngắn
+## Pitfalls
 
-Viết boot sequence có Monitor, Case, Motherboard và test thứ tự.
-
-## Interview prompt
-
-Orchestrator nên sở hữu rule nào?
-
-## Nguồn
-
-Transcript course lesson 105; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+- Public setter cho mọi part làm mất invariant.
+- Method orchestration trả void dù có failure quan trọng.
+- Một class vừa quản lý hardware, vừa format UI, vừa log.

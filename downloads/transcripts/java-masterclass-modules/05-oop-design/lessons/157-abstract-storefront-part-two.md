@@ -1,34 +1,25 @@
-# 157 — Abstract class challenge final
+# 157. Storefront challenge phần 2: checkout và receipt
 
-## Mục tiêu
+## Checkout flow
 
-Hoàn thiện storefront report, discount behavior và polymorphic tests.
+1. Validate cart không rỗng.
+2. Resolve product/price rule.
+3. Tính từng line và total trước khi commit.
+4. Tạo immutable receipt.
+5. Clear cart sau thành công.
 
-## Mental model
+```java
+record Receipt(List<ReceiptLine> lines, long totalCents) {
+    Receipt { lines = List.copyOf(lines); }
+}
+```
 
-Tách base identity, variation pricing và presentation. Test mỗi subtype plus one integration report.
+Nếu bước tính total overflow hoặc product missing, cart phải giữ nguyên. Đây là validate-all-before-mutate.
 
-## Ví dụ Java 17
+## Dependency injection
 
-~~~java
-`static int total(Product... ps){int t=0;for(Product p:ps)t+=p.price();return t;}`
-~~~
+Checkout nhận `PriceRule`, `Clock` hoặc `PaymentGateway` từ ngoài; test dùng fake deterministic. Không `new` gateway trong domain method.
 
-## Lỗi thường gặp
+## Bài tập
 
-- Discount logic rải outer loop.
-- Test chỉ một subtype.
-- Price overflow không nêu.
-
-## Bài tập ngắn
-
-Thêm DiscountedProduct hoặc PricingPolicy và so sánh designs.
-
-## Interview prompt
-
-Strategy có thể thay inheritance ở đâu?
-
-## Nguồn
-
-Transcript course lesson 157; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Viết self-check cho checkout success, empty cart, unknown SKU, overflow và payment failure. Chứng minh receipt không đổi khi cart sau đó mutate.

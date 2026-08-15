@@ -1,34 +1,29 @@
-# 165 — Interface challenge — Mapping Part 2
+# 165. Interface mapping challenge phần 2
 
-## Mục tiêu
+## Composition của mapper
 
-Hoàn thiện mapping logic và mở rộng implementation mà không sửa consumer.
+Mapper lớn thường nên compose mapper nhỏ:
 
-## Mental model
+```java
+final class OrderMapper {
+    private final Mapper<LineItem, LineDto> lineMapper;
+    OrderDto map(Order order) {
+        List<LineDto> lines = order.lines().stream().map(lineMapper::map).toList();
+        return new OrderDto(order.id(), lines);
+    }
+}
+```
 
-Consumer hướng abstraction; thêm implementation chỉ thêm class/test nếu contract ổn định.
+OrderMapper orchestrates; LineMapper chịu mapping line. Đây là separation of responsibilities và giúp test failure chính xác.
 
-## Ví dụ Java 17
+## Không để mapping leak domain
 
-~~~java
-`final class Location implements Mappable { public String map(){return "LOCATION";} }`
-~~~
+DTO không nên trở thành domain entity thứ hai có behavior nghiệp vụ. Mapping ở boundary, serialization ở adapter, policy ở domain/service phù hợp.
 
-## Lỗi thường gặp
+## Capstone checklist
 
-- Sửa consumer cho từng class.
-- Interface contract quá mơ hồ.
-- Không test empty list.
+Kiểm tra null contract, defensive copy, ordering deterministic, nested mapping, version compatibility và lỗi không làm mutate source.
 
-## Bài tập ngắn
+## Bài tập
 
-Thêm Product mapper và test regression.
-
-## Interview prompt
-
-Open/Closed và interface consumer liên hệ thế nào?
-
-## Nguồn
-
-Transcript course lesson 165; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Thêm `AdminUserMapper` và `PublicUserMapper` cùng source nhưng khác field exposure. Consumer chọn mapper qua interface, không `if role` trong mapper chung.

@@ -1,34 +1,39 @@
-# 109 — Printer encapsulation challenge
+# 109. Printer challenge: aggregate có state và policy
 
-## Mục tiêu
+## Bài toán
 
-Hoàn thiện Printer có toner, pages và duplex/print contract.
+Printer có toner level, pages printed, duplex mode và paper count. Thiết kế sao cho không thể in khi thiếu paper/toner, đồng thời không mutate một phần khi validation fail.
 
-## Mental model
+```java
+final class Printer {
+    private int tonerPercent;
+    private int paperSheets;
+    private int pagesPrinted;
+    Printer(int tonerPercent, int paperSheets) {
+        if (tonerPercent < 0 || tonerPercent > 100 || paperSheets < 0)
+            throw new IllegalArgumentException("initial state");
+        this.tonerPercent = tonerPercent;
+        this.paperSheets = paperSheets;
+    }
+    int printPages(int pages, boolean duplex) {
+        if (pages <= 0) throw new IllegalArgumentException("pages");
+        int sheets = duplex ? (pages + 1) / 2 : pages;
+        if (sheets > paperSheets || pages > tonerPercent)
+            throw new IllegalStateException("insufficient resources");
+        paperSheets -= sheets; tonerPercent -= pages; pagesPrinted += pages;
+        return sheets;
+    }
+}
+```
 
-Tách resource accounting (toner/pages) khỏi output formatting. Không cho in nếu thiếu resource; mutation phải atomic.
+## Phân tích contract
 
-## Ví dụ Java 17
+`pagesPrinted` là metric, `paperSheets` và toner là resource state. Method trả sheets dùng để report; caller không cần biết fields. Production có thể dùng `Math.addExact` nếu counters có nguy cơ overflow.
 
-~~~java
-`final class Printer { private int toner; private int pages; boolean print(int count){if(count<=0||toner<count)return false;toner-=count;pages+=count;return true;} }`
-~~~
+## Test bắt buộc
 
-## Lỗi thường gặp
+Test simple/duplex, pages lẻ, thiếu paper, thiếu toner, input âm và failure giữ nguyên cả ba field. Đây là ví dụ điển hình của encapsulation: invariant nằm trong object.
 
-- Trừ toner trước khi validate.
-- Cho pages âm.
-- Expose toner setter.
+## Mở rộng
 
-## Bài tập ngắn
-
-Viết Printer và self-check cho exact resource boundaries.
-
-## Interview prompt
-
-Atomic state update trong method nghĩa là gì?
-
-## Nguồn
-
-Transcript course lesson 109; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Nếu printer có nhiều paper tray, tạo `PaperSource` component; đừng làm Printer thành class chứa mọi policy unrelated.

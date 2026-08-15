@@ -1,34 +1,26 @@
-# 115 — Polymorphism challenge final
+# 115. Cars challenge: hoàn thiện hierarchy
 
-## Mục tiêu
+## Thiết kế challenge
 
-Hoàn thiện car hierarchy, factory và behavior report không sửa loop khi thêm subtype.
+Viết invariant cho engine state, fuel/battery, range và speed trước khi code. Nếu capability là điều quan trọng, interface có thể nhỏ hơn abstract class:
 
-## Mental model
+```java
+record DriveResult(int distanceKm, int remainingEnergy) {}
+interface Drivable { DriveResult drive(int distanceKm); }
+```
 
-Use stable abstraction; test contract per subtype và integration test factory -> report.
+## Failure semantics
 
-## Ví dụ Java 17
+`drive(10)` khi còn 5 km range nên trả result lỗi hoặc ném exception đã document. Không trừ energy trước rồi mới phát hiện thiếu range. Mọi failure phải giữ state cũ.
 
-~~~java
-`static String report(Car... cars){var b=new StringBuilder(); for(Car c:cars)b.append(c.drive()); return b.toString();}`
-~~~
+## Test matrix
 
-## Lỗi thường gặp
+Test engine off, distance zero/âm, đủ và thiếu energy, nhiều subtype qua cùng interface và failure không làm state drift.
 
-- Factory return concrete.
-- Không test subtype mới.
-- Static method chứa mutable global.
+## Design review
 
-## Bài tập ngắn
+So sánh một class với `fuelType`, abstract `Car` và composition `Car + EnergySource`. Chọn dựa vào variation có ổn định không và energy source có thay thế được không.
 
-Thêm HybridCar và verify report unchanged.
+## Bài tập
 
-## Interview prompt
-
-Open/Closed được chứng minh bằng test nào?
-
-## Nguồn
-
-Transcript course lesson 115; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Viết `TripPlanner` chỉ phụ thuộc `Drivable`, inject fake car để test mà không cần battery thật.

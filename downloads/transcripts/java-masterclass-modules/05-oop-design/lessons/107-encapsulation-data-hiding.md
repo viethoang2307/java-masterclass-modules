@@ -1,34 +1,42 @@
-# 107 — Encapsulation Part 1 — Data hiding
+# 107. Encapsulation và data hiding
 
-## Mục tiêu
+## Getter không tự động là encapsulation
 
-Ẩn data, expose behavior và giữ invariant ở boundary.
+```java
+final class Wallet {
+    private long cents;
+    public long balanceCents() { return cents; }
+    public void add(long amount) {
+        if (amount <= 0) throw new IllegalArgumentException("amount");
+        cents = Math.addExact(cents, amount);
+    }
+}
+```
 
-## Mental model
+Caller được hỏi balance nhưng không được set balance tùy ý. Method `add` là command giữ invariant.
 
-Encapsulation là kiểm soát mutation và dependency, không phải chỉ private + getter. Command methods biểu diễn domain intent.
+## Mutable reference leak
 
-## Ví dụ Java 17
+```java
+final class Playlist {
+    private final List<String> songs;
+    Playlist(List<String> songs) { this.songs = new ArrayList<>(songs); }
+    List<String> songs() { return List.copyOf(songs); }
+}
+```
 
-~~~java
-`final class Printer { private int toner; boolean addToner(int x){if(x<=0)return false;toner=Math.min(100,toner+x);return true;} }`
-~~~
+Constructor copy chống caller sửa input; accessor snapshot chống caller sửa internal state. Chọn `Collections.unmodifiableList` khi muốn view sống, `List.copyOf` khi muốn snapshot immutable.
 
-## Lỗi thường gặp
+## Access level
 
-- Public setter phá invariant.
-- Getter cho mutable state.
-- Magic clamp không document.
+Bắt đầu với `private`. Mở `public` cho capability caller cần, không mở field “cho tiện”. `protected` tạo contract cho subclass và nên dùng tiết chế.
 
-## Bài tập ngắn
+## Bài tập
 
-Implement Printer toner 0..100 với addToner/print.
+Audit một `Customer` class có public setters cho mọi field. Chuyển thành constructor + command methods, viết rõ invariant email, credit limit và status.
 
-## Interview prompt
+## Pitfalls
 
-Getter/setter có luôn là encapsulation tốt không?
-
-## Nguồn
-
-Transcript course lesson 107; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+- Getter trả `ArrayList` nội bộ.
+- Setter cho state chỉ được đổi qua workflow.
+- Public constructor cho object chưa đủ dữ liệu hợp lệ.

@@ -1,34 +1,37 @@
-# 98 — Overload VS override trong API
+# 098. Overload và override: compile-time so với runtime
 
-## Mục tiêu
+## Overload
 
-Phân biệt compile-time overload và runtime override để tránh API mơ hồ.
+Compiler chọn overload dựa trên static type và argument compile-time:
 
-## Mental model
+```java
+void send(String value) { System.out.println("text"); }
+void send(Object value) { System.out.println("object"); }
+Object value = "java";
+send(value); // object
+```
 
-Overload chọn bằng compile-time types; override chọn implementation runtime. Return type không tham gia overload.
+## Override
 
-## Ví dụ Java 17
+Runtime type quyết định implementation khi subtype override cùng signature:
 
-~~~java
-`Printer p=new ColorPrinter(); p.print(1); // override của print(int)`
-~~~
+```java
+Worker worker = new HourlyWorker(...);
+worker.calculatePayCents(); // HourlyWorker implementation
+```
+
+Luôn dùng `@Override`; annotation giúp compiler bắt typo hoặc signature sai. Override không được giảm visibility, return type chỉ được covariant, và checked exception không được rộng hơn contract base. Static method bị hide, không polymorphic.
+
+## Debugging recipe
+
+Khi output bất ngờ, ghi ra static type, runtime type, signature candidate sau overload resolution và xem method có `static`, `final` hay `private` không.
+
+## Bài tập
+
+Tạo `render(Object)`, `render(String)` và subclass override `render(Object)`. Dự đoán sáu lời gọi trước khi chạy rồi giải thích.
 
 ## Lỗi thường gặp
 
-- Tưởng runtime type chọn overload.
-- Overload với null gây ambiguous.
-- Thiếu @Override.
-
-## Bài tập ngắn
-
-Tạo trace table cho Printer/ColorPrinter với int, String, Object.
-
-## Interview prompt
-
-Vì sao `print(null)` có thể không compile?
-
-## Nguồn
-
-Transcript course lesson 98; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+- Đổi parameter list rồi tưởng đã override.
+- Bỏ `@Override`.
+- Dùng overload để mô phỏng polymorphism runtime.

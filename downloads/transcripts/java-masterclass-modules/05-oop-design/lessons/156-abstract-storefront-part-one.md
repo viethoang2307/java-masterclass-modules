@@ -1,34 +1,33 @@
-# 156 — Abstract class challenge — Storefront
+# 156. Storefront challenge phần 1: model sản phẩm
 
-## Mục tiêu
+## Domain boundary
 
-Xây Product abstract với price/name và subtype pricing cho store.
+Storefront có product, price, discount và receipt. Product nên là value-like data; calculation nên dùng cents:
 
-## Mental model
+```java
+record Product(String sku, String name, long priceCents) {
+    Product {
+        if (sku == null || sku.isBlank() || name == null || name.isBlank() || priceCents < 0)
+            throw new IllegalArgumentException("invalid product");
+    }
+}
+```
 
-Storefront chỉ cần Product.price(); pricing policy khác nhau nằm trong subtype hoặc strategy.
+## Price abstraction
 
-## Ví dụ Java 17
+```java
+abstract class PriceRule {
+    public final long finalPrice(Product product) {
+        long result = calculate(product);
+        if (result < 0) throw new IllegalStateException("negative price");
+        return result;
+    }
+    protected abstract long calculate(Product product);
+}
+```
 
-~~~java
-`abstract class Product { final String name; abstract int price(); }`
-~~~
+Base rule bảo vệ non-negative postcondition; subtype chỉ tính discount.
 
-## Lỗi thường gặp
+## Bài tập
 
-- Store tự switch subtype.
-- Price mutation public.
-- Invalid product name.
-
-## Bài tập ngắn
-
-Tạo Book/Electronic và total catalog.
-
-## Interview prompt
-
-Có nên dùng abstract class hay interface cho Product?
-
-## Nguồn
-
-Transcript course lesson 156; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Implement `NoDiscount`, `PercentageDiscount`, `FixedDiscount`; test zero price, discount lớn hơn price và overflow.

@@ -1,34 +1,43 @@
-# 108 — Encapsulation Part 2 — State transitions
+# 108. Encapsulation và state transitions
 
-## Mục tiêu
+## State machine thay cho boolean rời rạc
 
-Thiết kế object state machine với valid transitions và failure result.
+```java
+enum OrderStatus { DRAFT, SUBMITTED, PAID, CANCELLED }
 
-## Mental model
+final class Order {
+    private OrderStatus status = OrderStatus.DRAFT;
+    public OrderStatus status() { return status; }
+    public void submit() {
+        require(OrderStatus.DRAFT);
+        status = OrderStatus.SUBMITTED;
+    }
+    public void pay() {
+        require(OrderStatus.SUBMITTED);
+        status = OrderStatus.PAID;
+    }
+    private void require(OrderStatus expected) {
+        if (status != expected) throw new IllegalStateException("expected " + expected);
+    }
+}
+```
 
-Mỗi command kiểm tra precondition trước mutation; state chỉ thay đổi tại một nơi. Test transition matrix thay vì chỉ happy path.
+State transition là behavior của aggregate, không phải `order.setPaid(true)`. Một enum giúp liệt kê trạng thái hợp lệ; command method bảo vệ transition.
 
-## Ví dụ Java 17
+## Atomicity
 
-~~~java
-`enum State{IDLE,RUNNING,STOPPED}`
-~~~
+Validate mọi precondition trước khi mutate. Nếu `pay()` còn cần charge gateway, cân nhắc status `PAYMENT_PENDING` và result rõ thay vì mutate rồi gọi service có thể fail.
 
-## Lỗi thường gặp
+## Test matrix
 
-- Mutation rải nhiều method.
-- Invalid transition vẫn đổi state.
-- Boolean result không giải thích failure.
+Test happy path, transition sai, repeated command, exception không đổi state và mỗi terminal state. Property quan trọng: operation fail không làm state drift.
 
-## Bài tập ngắn
+## Bài tập
 
-Tạo Printer state idle/printing/out-of-paper và transition tests.
+Thiết kế subscription `TRIAL → ACTIVE → PAUSED → CANCELLED`; viết allowed transition table và test toàn bộ cặp state.
 
-## Interview prompt
+## Pitfalls
 
-Invariant và transition khác nhau thế nào?
-
-## Nguồn
-
-Transcript course lesson 108; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+- Nhiều boolean tạo trạng thái không hợp lệ.
+- Public setter cho enum.
+- Nuốt exception rồi vẫn báo success.

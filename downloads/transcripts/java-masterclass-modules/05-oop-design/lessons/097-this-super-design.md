@@ -1,34 +1,43 @@
-# 97 — this và super trong design
+# 097. `this` và `super` trong thiết kế constructor
 
-## Mục tiêu
+## `this`
 
-Dùng this/super rõ ràng trong constructor và override để giảm duplication.
+`this` là reference tới object hiện tại. Nó giúp phân biệt field/parameter và chain constructor:
 
-## Mental model
+```java
+final class User {
+    private final String name;
+    private final String role;
+    User(String name) { this(name, "viewer"); }
+    User(String name, String role) {
+        this.name = require(name, "name");
+        this.role = require(role, "role");
+    }
+    private static String require(String value, String field) {
+        if (value == null || value.isBlank()) throw new IllegalArgumentException(field);
+        return value.strip();
+    }
+}
+```
 
-this.field phân biệt parameter; this(...) chain cùng class; super(...) khởi tạo base; super.method() reuse base behavior.
+Constructor chaining tập trung invariant, tránh lặp validation ở nhiều overload.
 
-## Ví dụ Java 17
+## `super`
 
-~~~java
-`class Staff extends Person { Staff(String n){super(n);} @Override String label(){return super.label()+"/staff";} }`
-~~~
+Subclass gọi constructor base bằng `super(...)`, và lệnh này phải là statement đầu tiên:
 
-## Lỗi thường gặp
+```java
+final class Admin extends User {
+    Admin(String name) { super(name, "admin"); }
+}
+```
 
-- Gọi super không ở đầu constructor.
-- Dùng super field thay method contract.
-- Copy base validation.
+Nếu base không có no-arg constructor, subclass bắt buộc chọn constructor phù hợp. Đây là design signal: base cần dữ liệu gì để object hợp lệ?
 
-## Bài tập ngắn
+## Method dispatch
 
-Viết hierarchy có canonical constructor và label override.
+`super.method()` gọi implementation base; `this.method()` có thể dispatch tới override. Tránh gọi method overridable trong constructor vì subtype fields chưa sẵn sàng.
 
-## Interview prompt
+## Bài tập
 
-Constructor order khi new subclass?
-
-## Nguồn
-
-Transcript course lesson 97; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Thiết kế `Employee` và `Manager` với constructor overload hợp lệ, không lặp validation. Viết trace thứ tự constructor bằng output.

@@ -1,34 +1,45 @@
-# 94 — Object contract foundation
+# 094. Object contract: equality, identity và representation
 
 ## Mục tiêu
 
-Hiểu toString, equals và hashCode như contract nền tảng của mọi Java object.
+Phân biệt identity (`==`), logical equality (`equals`) và representation (`toString`) để không viết collection/domain code sai.
 
-## Mental model
+## Ba contract khác nhau
 
-Logical equality phải reflexive, symmetric, transitive, consistent và false với null. hashCode phải giống nhau khi equals true.
+```java
+record Money(String currency, long cents) {}
 
-## Ví dụ Java 17
+Money a = new Money("USD", 500);
+Money b = new Money("USD", 500);
+System.out.println(a == b);      // false: khác object reference
+System.out.println(a.equals(b)); // true: cùng value
+```
 
-~~~java
-`record UserId(String value) { }\nSystem.out.println(new UserId("A"));`
-~~~
+`==` với object kiểm tra cùng reference. `equals` kiểm tra cùng ý nghĩa theo domain. `hashCode` phải giống nhau khi `equals` là true. `toString` phục vụ debug/log/UI, không phải parser nếu chưa định nghĩa format ổn định.
+
+## Tự viết `equals`
+
+```java
+@Override public boolean equals(Object other) {
+    if (this == other) return true;
+    if (!(other instanceof Money money)) return false;
+    return cents == money.cents && currency.equals(money.currency);
+}
+@Override public int hashCode() { return Objects.hash(currency, cents); }
+```
+
+`equals` cần reflexive, symmetric, transitive, consistent và false với null. Field tham gia equality phải là field định danh/giá trị, không tùy tiện thêm mọi field mutable.
 
 ## Lỗi thường gặp
 
-- equals/hashCode không nhất quán.
-- toString chứa secret.
-- So sánh reference khi cần value.
+- Override `equals` nhưng quên `hashCode`.
+- Dùng `getClass()` khi muốn equality giữa subtype hợp lệ, hoặc dùng `instanceof` khi subtype làm thay đổi semantics.
+- Lấy `toString` làm dữ liệu business.
 
-## Bài tập ngắn
+## Bài tập
 
-Implement value object bằng class và record, so sánh generated methods.
+Viết value object `EmailAddress` normalize lowercase và test trong `HashSet`. Thử bỏ `hashCode`, quan sát lookup trong map/set.
 
-## Interview prompt
+## Checkpoint
 
-Vì sao override equals phải override hashCode?
-
-## Nguồn
-
-Transcript course lesson 94; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Trước khi đưa class vào `HashMap`/`HashSet`, phải trả lời: identity có immutable không, equality dựa trên field nào, và object có được mutate sau insertion không?

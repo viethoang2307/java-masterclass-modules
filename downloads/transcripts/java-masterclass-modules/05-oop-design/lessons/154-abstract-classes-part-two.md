@@ -1,34 +1,28 @@
-# 154 — Abstract Classes Part 2
+# 154. Abstract classes phần 2: mở rộng có kiểm soát
 
-## Mục tiêu
+## Protected contract
 
-Dùng abstract hierarchy polymorphically và bảo vệ invariant chung.
+Protected method là API giữa base và subclass. Nó cần documentation về precondition, state lúc được gọi và giá trị phải trả.
 
-## Mental model
+```java
+abstract class ImportJob {
+    public final ImportReport run(String input) {
+        ParsedData data = parse(input);
+        validate(data);
+        return persist(data);
+    }
+    protected abstract ParsedData parse(String input);
+    protected void validate(ParsedData data) {}
+    protected abstract ImportReport persist(ParsedData data);
+}
+```
 
-Base constructor enforce fields; abstract method là variation point. Caller làm việc qua base reference.
+Base kiểm soát thứ tự parse→validate→persist; subclass không thể persist dữ liệu chưa validate.
 
-## Ví dụ Java 17
+## Khi không nên dùng template
 
-~~~java
-`abstract class Shape { private final String color; Shape(String c){color=c;} abstract double area(); }`
-~~~
+Nếu các flow khác nhau quá nhiều, template method tạo nhiều hook và subclass override khó đọc. Khi đó composition với các strategy (`Parser`, `Validator`, `Persister`) dễ thay thế/test hơn.
 
-## Lỗi thường gặp
+## Bài tập
 
-- Protected mutable state.
-- Base method gọi abstract trước state init.
-- Downcast trong collection.
-
-## Bài tập ngắn
-
-Tạo Shape list với Circle/Rectangle, sum area.
-
-## Interview prompt
-
-Template method có rủi ro gì khi gọi overridable method trong constructor?
-
-## Nguồn
-
-Transcript course lesson 154; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Refactor một template class có 7 protected hooks thành ba collaborator interfaces. So sánh số điểm extension và test case.

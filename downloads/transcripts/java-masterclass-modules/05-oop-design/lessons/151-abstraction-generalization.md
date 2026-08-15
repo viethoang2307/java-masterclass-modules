@@ -1,34 +1,33 @@
-# 151 — Abstraction và Generalization
+# 151. Abstraction và generalization
 
-## Mục tiêu
+## Abstraction là gì?
 
-Rút common contract từ nhiều implementation mà không kéo mọi chi tiết lên abstraction.
+Abstraction giữ lại điều consumer cần và giấu chi tiết thay đổi. Một abstraction tốt mô tả capability/contract, không phải danh sách mọi field của implementation.
 
-## Mental model
+```java
+interface Payable {
+    long amountCents();
+}
+```
 
-Abstraction là chọn điều caller cần biết. Generalization tốt làm giảm coupling; abstraction quá rộng tạo method vô nghĩa.
+Invoice, salary hoặc refund đều có thể `Payable` dù implementation khác nhau. Consumer tính tổng mà không biết source:
 
-## Ví dụ Java 17
+```java
+static long total(List<? extends Payable> values) {
+    long total = 0;
+    for (Payable value : values) total = Math.addExact(total, value.amountCents());
+    return total;
+}
+```
 
-~~~java
-`interface Payable { long pay(); }\nstatic long total(Payable... xs){long t=0;for(var x:xs)t+=x.pay();return t;}`
-~~~
+## Generalization quá sớm
 
-## Lỗi thường gặp
+Đừng tạo `BaseEntity` chỉ vì nhiều class có `id`. Hãy kiểm tra behavior thật sự dùng chung, invariant giống nhau và lifecycle có đồng nhất không. Abstraction sai làm mọi subtype phải hiểu rule không liên quan.
 
-- Abstraction theo class name thay behavior.
-- Interface quá nhiều method.
-- Caller phụ thuộc implementation.
+## Bài tập
 
-## Bài tập ngắn
+Tìm ba class trong một hệ thống bán hàng, đề xuất một interface capability và viết consumer chỉ phụ thuộc interface. Ghi rõ điều gì cố ý không đưa vào abstraction.
 
-Tạo Payable cho Employee/Invoice và total không biết concrete type.
+## Checkpoint
 
-## Interview prompt
-
-Abstraction leak là gì?
-
-## Nguồn
-
-Transcript course lesson 151; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Abstraction nên trả lời “caller được làm gì?”, không phải “implementation có những field nào?”.

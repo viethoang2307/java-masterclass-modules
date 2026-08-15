@@ -1,34 +1,33 @@
-# 158 — Interfaces Part 1 — Contracts
+# 158. Interface contracts
 
-## Mục tiêu
+## Interface là lời hứa
 
-Dùng interface để mô tả capability và tạo nhiều implementation.
+```java
+interface Notifier {
+    DeliveryResult send(Message message);
+}
+```
 
-## Mental model
+Contract phải nói rõ null, idempotency, retry, exception/result và thread-safety nếu liên quan. Tên method không đủ để caller biết behavior.
 
-Interface là contract; caller phụ thuộc method signatures. Implementation có thể không cùng class hierarchy.
+## Dependency inversion
 
-## Ví dụ Java 17
+Service phụ thuộc interface:
 
-~~~java
-`interface Mappable { String map(); }\nfinal class User implements Mappable { public String map(){return "user";} }`
-~~~
+```java
+final class AlertService {
+    private final Notifier notifier;
+    AlertService(Notifier notifier) { this.notifier = Objects.requireNonNull(notifier); }
+    DeliveryResult alert(Message message) { return notifier.send(message); }
+}
+```
 
-## Lỗi thường gặp
+Test inject `FakeNotifier`; production inject email/SMS implementation.
 
-- Interface method visibility thiếu public.
-- Interface làm data model.
-- Contract không document null/error.
+## Interface nhỏ
 
-## Bài tập ngắn
+Một interface có `send`, `refund`, `schedule`, `export` buộc implementation phụ thuộc method không cần. Tách theo capability để implementer và consumer chỉ thấy contract liên quan.
 
-Tạo Mappable cho User/Order và mapper service.
+## Bài tập
 
-## Interview prompt
-
-Interface biểu diễn IS-A hay CAN-DO?
-
-## Nguồn
-
-Transcript course lesson 158; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Viết contract comment cho `PaymentGateway.charge`, gồm retry và duplicate request. Tạo fake kiểm tra service gọi đúng một lần.

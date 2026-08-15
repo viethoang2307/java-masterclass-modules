@@ -1,34 +1,24 @@
-# 155 — Abstract Classes Part 3
+# 155. Abstract classes phần 3: đánh giá hierarchy
 
-## Mục tiêu
+## Checklist review
 
-Thiết kế hierarchy mở rộng được và nhận diện recursion/base case khi cần.
+Base class có invariant thật sự chung không? Method `final` nào bảo vệ sequence? Subclass có phải override bằng no-op/exception không? Protected API có nhỏ và ổn định không? Nếu câu trả lời xấu, hierarchy đang chứa quá nhiều responsibility.
 
-## Mental model
+## Example mùi thiết kế
 
-Abstraction cần termination nếu method recursive; subtype behavior không được phá invariants của base.
+```java
+abstract class FileProcessor {
+    abstract void processPdf();
+    abstract void processCsv();
+}
+```
 
-## Ví dụ Java 17
+Một processor chỉ xử lý PDF sẽ bị ép implement CSV. Tách `Processor` contract nhỏ hoặc dùng strategy.
 
-~~~java
-`static int sum(int[] xs,int i){return i==xs.length?0:xs[i]+sum(xs,i+1);}`
-~~~
+## Bài tập
 
-## Lỗi thường gặp
+Audit hierarchy `Shape` có `area`, `volume`, `draw`, `serialize`. Tách thành capability interfaces và giữ consumer phụ thuộc đúng method cần.
 
-- Recursion không base case.
-- Hierarchy quá sâu.
-- Abstract method contract không document.
+## Kết luận
 
-## Bài tập ngắn
-
-Viết recursive tree/price exercise rồi refactor iterative comparison.
-
-## Interview prompt
-
-Khi nào recursion làm design khó kiểm chứng?
-
-## Nguồn
-
-Transcript course lesson 155; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Abstract class là công cụ chia sẻ invariant + implementation, không phải nơi gom mọi behavior có vẻ liên quan. Mỗi method trong base làm contract của tất cả subtype rộng thêm.

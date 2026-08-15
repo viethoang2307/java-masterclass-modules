@@ -1,34 +1,30 @@
-# 247 — Sealed classes
+# 247. Sealed classes và hierarchy có giới hạn
 
-## Mục tiêu
+## Cú pháp Java 17
 
-Giới hạn subtype bằng sealed/permits/non-sealed và hiểu exhaustive type design trong Java 17.
+```java
+sealed interface Shape permits Circle, Rectangle, Triangle {}
+record Circle(double radius) implements Shape {}
+record Rectangle(double width, double height) implements Shape {}
+record Triangle(double base, double height) implements Shape {}
+```
 
-## Mental model
+Sealed type công bố rõ subtype được phép. Compiler biết hierarchy đóng và giúp exhaustive switch/analysis tốt hơn.
 
-sealed hierarchy làm closed world explicit. Direct subclass phải final, sealed hoặc non-sealed; compiler biết tập subtype được phép.
+## Khi dùng sealed
 
-## Ví dụ Java 17
+Dùng khi domain có tập loại cố định hoặc team muốn kiểm soát extension. Không dùng khi plugin bên ngoài cần tự thêm subtype; khi đó interface mở phù hợp hơn.
 
-~~~java
-`sealed interface Result permits Ok, Error { }\nrecord Ok(String value) implements Result {}\nrecord Error(String message) implements Result {}`
-~~~
+## Invariant
 
-## Lỗi thường gặp
+Record không tự reject radius âm; compact constructor phải validate:
 
-- permits sai subtype.
-- Subclass không khai báo modifier hợp lệ.
-- Dùng sealed khi plugin extension là requirement.
+```java
+record Circle(double radius) implements Shape {
+    Circle { if (radius <= 0) throw new IllegalArgumentException("radius"); }
+}
+```
 
-## Bài tập ngắn
+## Bài tập
 
-Tạo Result sealed hierarchy và switch/instanceof exhaustive handling.
-
-## Interview prompt
-
-Sealed type phù hợp closed-world hay open-world design?
-
-## Nguồn
-
-Transcript course lesson 247; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Tạo sealed `PaymentResult` gồm `Approved`, `Declined`, `RetryableFailure`; viết formatter exhaustive và test mọi subtype.

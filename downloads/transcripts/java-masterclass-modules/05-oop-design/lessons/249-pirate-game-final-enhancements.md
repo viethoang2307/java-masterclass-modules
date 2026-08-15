@@ -1,34 +1,23 @@
-# 249 — Pirate game final enhancements
+# 249. Pirate game final: integration và review
 
-## Mục tiêu
+## Integration boundary
 
-Hoàn thiện town/loot/combat flow, giữ invariant và report deterministic.
+Game loop đọc command, domain model xử lý action, renderer in result. Ba phần không nên trộn trong một class:
 
-## Mental model
+```text
+Input command → GameService → Pirate/Weapon state → BattleResult → Renderer
+```
 
-Capstone OOP cần state transition rõ, capability contracts, composition và test scenario. Randomness phải injectable hoặc seed cố định khi test.
+`BattleResult` nên immutable và chứa attacker, defender, damage, remaining health, reason. Không trả message tự do từ domain nếu UI có thể cần nhiều format.
 
-## Ví dụ Java 17
+## Review checklist
 
-~~~java
-`final class Town { private final java.util.List<String> loot=new java.util.ArrayList<>(); void add(String x){loot.add(x);} }`
-~~~
+Kiểm tra invariant ở constructor/command, dependency injection cho random/clock, interface nhỏ cho weapon, failure không mutate sai, immutable result và report deterministic.
 
-## Lỗi thường gặp
+## Bài tập capstone
 
-- Mutable collection leak.
-- Combat update không atomic.
-- Test phụ thuộc random default.
+Thêm inventory bằng `Map<String,Weapon>`, command `equip`, sealed `GameEvent` và replay log. Viết self-check replay cùng seed cho cùng event sequence.
 
-## Bài tập ngắn
+## Kết luận
 
-Viết scenario nhiều turn với seed/fake RNG và snapshot report.
-
-## Interview prompt
-
-Dependency injection cho RNG giúp ích gì?
-
-## Nguồn
-
-Transcript course lesson 249; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+OOP design tốt không nằm ở số lượng class. Nó nằm ở boundary: ai sở hữu state, ai được thay đổi state, contract nào được expose và thay đổi mới đi qua abstraction nào.

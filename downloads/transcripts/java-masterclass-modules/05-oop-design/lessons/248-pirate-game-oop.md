@@ -1,34 +1,31 @@
-# 248 — Pirate game — OOP integration
+# 248. Pirate game: mô hình hóa entity và action
 
-## Mục tiêu
+## Tách state khỏi action
 
-Tích hợp composition, inheritance, interface, state và command loop trong mini game.
+```java
+final class Pirate {
+    private int health;
+    private final Weapon weapon;
+    Pirate(int health, Weapon weapon) {
+        if (health <= 0) throw new IllegalArgumentException("health");
+        this.health = health; this.weapon = Objects.requireNonNull(weapon);
+    }
+    boolean attack(Pirate target) {
+        Objects.requireNonNull(target);
+        if (health <= 0) return false;
+        target.takeDamage(weapon.damage());
+        return true;
+    }
+    private void takeDamage(int damage) { health = Math.max(0, health - damage); }
+}
+```
 
-## Mental model
+Pirate giữ invariant health không âm; combat service không được sửa field trực tiếp.
 
-Game engine nên điều phối; Player/Weapon/Town giữ state riêng; interface capability như Lootable/Combatant giảm coupling.
+## Randomness
 
-## Ví dụ Java 17
+Không tạo `new Random()` rải trong action nếu muốn test. Inject `Random` hoặc `DamagePolicy`; self-check dùng seed/fake deterministic.
 
-~~~java
-`interface Combatant { int attack(); }\nfinal class Pirate implements Combatant { private int health=100; public int attack(){return 10;} }`
-~~~
+## Bài tập
 
-## Lỗi thường gặp
-
-- Game loop biết mọi field.
-- Inheritance lẫn composition không có boundary.
-- Randomness làm self-check flaky.
-
-## Bài tập ngắn
-
-Tạo deterministic combat round và test win/loss/loot.
-
-## Interview prompt
-
-Tách engine khỏi domain object như thế nào?
-
-## Nguồn
-
-Transcript course lesson 248; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Thêm `Weapon` interface, sword/gun implementations và battle result. Test dead attacker, dead target, zero damage và deterministic critical hit.

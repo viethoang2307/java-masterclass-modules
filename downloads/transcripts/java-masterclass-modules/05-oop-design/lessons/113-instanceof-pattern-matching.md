@@ -1,34 +1,28 @@
-# 113 — instanceof và pattern matching
+# 113. `instanceof` pattern matching
 
-## Mục tiêu
+## Cú pháp Java 17
 
-Dùng instanceof pattern binding để kiểm tra type và truy cập subtype an toàn trong Java 17.
+```java
+if (value instanceof String text && !text.isBlank()) {
+    System.out.println(text.strip());
+}
+```
 
-## Mental model
+Java kiểm tra type và bind variable trong một expression. Pattern variable chỉ có scope nơi compiler chứng minh điều kiện đúng:
 
-Pattern match gộp type test + cast; vẫn nên ưu tiên polymorphic method nếu behavior thuộc base contract.
+```java
+if (!(movie instanceof Adventure adventure)) return;
+adventure.specialMove();
+```
 
-## Ví dụ Java 17
+## Khi nên dùng
 
-~~~java
-`if(movie instanceof Adventure adventure){ return adventure.stunt(); }`
-~~~
+`instanceof` phù hợp ở boundary như serializer, adapter hoặc khi xử lý closed hierarchy. Nó không nên trở thành switch trung tâm cho mọi behavior polymorphic.
 
-## Lỗi thường gặp
+## Null và refactor signal
 
-- Pattern variable ngoài scope.
-- Dùng instanceof chain quá nhiều.
-- Cast object null.
+`null instanceof SomeType` luôn false. Nếu null là invalid domain value, reject sớm. Nếu có nhiều nhánh type, hỏi xem behavior đó có nên là method của abstraction hoặc exhaustive switch trên sealed type không.
 
-## Bài tập ngắn
+## Bài tập
 
-Refactor một type-check chain thành override hoặc pattern matching phù hợp.
-
-## Interview prompt
-
-Khi nào instanceof là code smell?
-
-## Nguồn
-
-Transcript course lesson 113; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Viết `describe(Object)` xử lý String, Integer và null; sau đó thiết kế lại thành `Describable` để so sánh coupling.

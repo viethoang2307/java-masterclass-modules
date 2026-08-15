@@ -1,34 +1,37 @@
-# 99 — Text blocks và presentation
+# 099. Text blocks: presentation là responsibility riêng
 
-## Mục tiêu
+## Cú pháp Java 17
 
-Dùng text block cho report nhiều dòng nhưng giữ presentation tách khỏi domain model.
+```java
+String receipt = """
+        RECEIPT
+        --------
+        Item: Java Book
+        Total: 12.50 USD
+        """;
+```
 
-## Mental model
+Java xử lý incidental indentation, nhưng newline đầu/cuối và trailing spaces vẫn là phần cần test nếu output là contract.
 
-Text block là syntax cho String literal, không phải template engine. formatted() thay placeholder; newline/indentation là output contract.
+## Tách model khỏi format
 
-## Ví dụ Java 17
+Model trả data; formatter tạo text. Không để `Order` biết console width, ANSI color hay locale hiện tại.
 
-~~~java
-`String s="""\n        Name: %s\n        Score: %d\n        """.formatted("An",80);`
-~~~
+```java
+record ReceiptLine(String name, long cents) {}
 
-## Lỗi thường gặp
+final class ReceiptFormatter {
+    String format(List<ReceiptLine> lines) {
+        StringBuilder out = new StringBuilder("RECEIPT\n");
+        for (ReceiptLine line : lines)
+            out.append(line.name()).append(':').append(line.cents()).append('\n');
+        return out.toString();
+    }
+}
+```
 
-- Không test trailing newline.
-- Đưa business rule vào template.
-- Indentation incidental bị hiểu sai.
+Text block hợp với template tĩnh; `StringBuilder`/formatter hợp với list động. Output formatter nên pure để self-check deterministic.
 
-## Bài tập ngắn
+## Bài tập và pitfalls
 
-Tạo report invoice bằng text block và exact-output test.
-
-## Interview prompt
-
-Khi nào text block làm code dễ bảo trì hơn?
-
-## Nguồn
-
-Transcript course lesson 99; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Viết formatter receipt có exact output, test empty/một/nhiều item và Unicode. Đừng so output bằng mắt, đừng nhúng business calculation vào text block, và đừng dùng text block làm JSON/SQL nếu chưa xử lý escaping.

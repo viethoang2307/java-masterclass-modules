@@ -1,34 +1,21 @@
-# 163 — Interface VS Abstract Class
+# 163. Interface hay abstract class?
 
-## Mục tiêu
+## Quy tắc thực dụng
 
-Ra quyết định interface/abstract class dựa trên shared state, identity và multiple capabilities.
+Chọn abstract class khi cần constructor, protected state, shared implementation và lifecycle chung. Chọn interface khi muốn capability, multiple implementation/hierarchy và dependency inversion.
 
-## Mental model
+| Câu hỏi | Abstract class | Interface |
+|---|---|---|
+| Chia sẻ instance state? | Có | Không nên |
+| Nhiều capability? | Một base class | Nhiều interface |
+| Constructor chung? | Có | Không |
+| Contract cho consumer? | Có | Rất phù hợp |
+| Mở rộng độc lập? | Bị giới hạn hierarchy | Linh hoạt hơn |
 
-Abstract class phù hợp common state + invariant + template. Interface phù hợp capability, multiple implementation và loose coupling.
+## Hybrid
 
-## Ví dụ Java 17
+Một class có thể `extends BaseWorker implements Payable, Auditable`. Base giữ invariant worker; interfaces mô tả capability orthogonal.
 
-~~~java
-`abstract class BaseJob { protected final String id; }\ninterface Retryable { boolean retry(); }`
-~~~
+## Bài tập
 
-## Lỗi thường gặp
-
-- Chọn theo thói quen.
-- Abstract class làm hierarchy cứng.
-- Interface chứa mutable shared state.
-
-## Bài tập ngắn
-
-Viết decision table cho 5 domain examples.
-
-## Interview prompt
-
-Khi nào abstract class là coupling không cần thiết?
-
-## Nguồn
-
-Transcript course lesson 163; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Với `FileStore`, `EncryptedStore`, `RetryingStore`, quyết định abstraction nào là interface, decorator nào là composition và phần shared validation đặt ở đâu.

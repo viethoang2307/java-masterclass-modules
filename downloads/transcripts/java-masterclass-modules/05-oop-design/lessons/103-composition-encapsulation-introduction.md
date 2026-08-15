@@ -1,34 +1,41 @@
-# 103 — Composition và Encapsulation
-
-## Mục tiêu
-
-Phân biệt HAS-A với IS-A và dùng composition để lắp object nhỏ thành hệ thống.
+# 103. Composition và encapsulation: HAS-A trước IS-A
 
 ## Mental model
 
-Composition giữ collaborator trong field; owner điều phối behavior nhưng không expose toàn bộ internal structure. Đây thường là default design trước inheritance.
+Composition biểu diễn object sở hữu hoặc sử dụng object khác: `Computer HAS-A Monitor`, `Order HAS-A List<Line>`. Caller tương tác qua behavior của aggregate, không sửa parts tùy ý.
 
-## Ví dụ Java 17
+```java
+final class Computer {
+    private final Monitor monitor;
+    private final Keyboard keyboard;
+    Computer(Monitor monitor, Keyboard keyboard) {
+        this.monitor = Objects.requireNonNull(monitor);
+        this.keyboard = Objects.requireNonNull(keyboard);
+    }
+    void boot() { monitor.turnOn(); keyboard.connect(); }
+}
+```
 
-~~~java
-`final class Computer { private final Monitor monitor; private final Motherboard board; Computer(Monitor m,Motherboard b){monitor=m;board=b;} }`
-~~~
+Composition giảm coupling hierarchy: thay `Monitor` implementation không cần subclass `Computer`. Dependency injection qua constructor cũng giúp test bằng fake object.
+
+## Encapsulation
+
+Encapsulation không chỉ là private field + getter. Nó là quyền quyết định invariant thuộc về object nào. Nếu balance không được âm, `Account.withdraw()` phải kiểm tra; caller không được lấy field rồi tự trừ.
+
+## Ownership
+
+Hãy ghi rõ object được truyền vào là owned, shared hay borrowed. Collection cần defensive copy khi aggregate phải kiểm soát contents:
+
+```java
+this.lines = new ArrayList<>(lines);
+```
+
+## Bài tập
+
+Vẽ object graph cho `Order → Customer`, `Order → LineItem`, `LineItem → Product`. Đánh dấu object nào immutable, object nào mutable và boundary nào validate.
 
 ## Lỗi thường gặp
 
-- Inheritance chỉ để reuse.
-- Expose collaborator mutable.
-- Không define lifecycle/ownership.
-
-## Bài tập ngắn
-
-Model Computer bằng Monitor/Motherboard; thay đổi component mà không đổi Computer API.
-
-## Interview prompt
-
-Composition giải quyết vấn đề gì của inheritance?
-
-## Nguồn
-
-Transcript course lesson 103; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+- Getter trả mutable collection nội bộ.
+- Constructor nhận dependency null rồi lỗi muộn.
+- Composition nhưng vẫn expose toàn bộ part để caller điều khiển invariant.

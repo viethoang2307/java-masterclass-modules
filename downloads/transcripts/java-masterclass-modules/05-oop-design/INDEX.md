@@ -1,59 +1,82 @@
 # Module 05 — Lesson Index
 
-| # | Lesson | File | Status |
-|---:|---|---|---|
-| 91 | Inheritance và IS-A | [lesson](lessons/091-inheritance-as-is-a.md) | Done |
-| 92 | Common behavior | [lesson](lessons/092-inheritance-common-behavior.md) | Done |
-| 93 | Subclass specialization | [lesson](lessons/093-subclass-specialization.md) | Done |
-| 94 | Object contract | [lesson](lessons/094-object-contract-foundation.md) | Done |
-| 95 | Worker hierarchy | [lesson](lessons/095-worker-hierarchy-design.md) | Done |
-| 96 | Specialized workers | [lesson](lessons/096-worker-specialization.md) | Done |
-| 97 | this và super | [lesson](lessons/097-this-super-design.md) | Done |
-| 98 | Overload VS override | [lesson](lessons/098-overload-vs-override-design.md) | Done |
-| 99 | Text blocks | [lesson](lessons/099-text-block-presentation.md) | Done |
-| 100 | String như value | [lesson](lessons/100-string-as-value.md) | Done |
-| 101 | String parsing | [lesson](lessons/101-string-parsing-design.md) | Done |
-| 102 | StringBuilder | [lesson](lessons/102-stringbuilder-output.md) | Done |
-| 103 | Composition và Encapsulation | [lesson](lessons/103-composition-encapsulation-introduction.md) | Done |
-| 104 | Computer composition | [lesson](lessons/104-computer-composition.md) | Done |
-| 105 | Object composition workflow | [lesson](lessons/105-personal-computer-management.md) | Done |
-| 106 | Smart Kitchen | [lesson](lessons/106-smart-kitchen-composition.md) | Done |
-| 107 | Data hiding | [lesson](lessons/107-encapsulation-data-hiding.md) | Done |
-| 108 | State transitions | [lesson](lessons/108-encapsulation-state-transitions.md) | Done |
-| 109 | Printer challenge | [lesson](lessons/109-printer-encapsulation-challenge.md) | Done |
-| 110 | Movie polymorphism | [lesson](lessons/110-polymorphism-movie-foundation.md) | Done |
-| 111 | Factory và runtime types | [lesson](lessons/111-factory-runtime-types.md) | Done |
-| 112 | Casting và var | [lesson](lessons/112-casting-and-var.md) | Done |
-| 113 | instanceof pattern | [lesson](lessons/113-instanceof-pattern-matching.md) | Done |
-| 114 | Cars polymorphism | [lesson](lessons/114-polymorphic-cars.md) | Done |
-| 115 | Cars challenge final | [lesson](lessons/115-polymorphic-cars-final.md) | Done |
-| 116 | Burger model | [lesson](lessons/116-oop-master-burger-model.md) | Done |
-| 117 | Meal orders | [lesson](lessons/117-oop-master-orders.md) | Done |
-| 118 | Deluxe Burger | [lesson](lessons/118-oop-master-deluxe-burger.md) | Done |
-| 151 | Abstraction và generalization | [lesson](lessons/151-abstraction-generalization.md) | Done |
-| 152 | Abstract và interface | [lesson](lessons/152-abstract-interface-modifiers.md) | Done |
-| 153 | Abstract classes 1 | [lesson](lessons/153-abstract-classes-part-one.md) | Done |
-| 154 | Abstract classes 2 | [lesson](lessons/154-abstract-classes-part-two.md) | Done |
-| 155 | Abstract classes 3 | [lesson](lessons/155-abstract-classes-part-three.md) | Done |
-| 156 | Storefront challenge 1 | [lesson](lessons/156-abstract-storefront-part-one.md) | Done |
-| 157 | Storefront challenge 2 | [lesson](lessons/157-abstract-storefront-part-two.md) | Done |
-| 158 | Interface contracts | [lesson](lessons/158-interfaces-contracts.md) | Done |
-| 159 | Multiple implementations | [lesson](lessons/159-interfaces-multiple-implementations.md) | Done |
-| 160 | Interface constants/conversion | [lesson](lessons/160-interfaces-constants-conversion.md) | Done |
-| 161 | Default/static methods | [lesson](lessons/161-interfaces-default-static.md) | Done |
-| 162 | Private interface methods | [lesson](lessons/162-interfaces-private-methods.md) | Done |
-| 163 | Interface VS abstract class | [lesson](lessons/163-interface-vs-abstract-class.md) | Done |
-| 164 | Mapping challenge 1 | [lesson](lessons/164-interface-mapping-challenge-one.md) | Done |
-| 165 | Mapping challenge 2 | [lesson](lessons/165-interface-mapping-challenge-two.md) | Done |
-| 246 | Final classes | [lesson](lessons/246-final-classes-constructor-access.md) | Done |
-| 247 | Sealed classes | [lesson](lessons/247-sealed-classes-hierarchy.md) | Done |
-| 248 | Pirate game | [lesson](lessons/248-pirate-game-oop.md) | Done |
-| 249 | Pirate game final | [lesson](lessons/249-pirate-game-final-enhancements.md) | Done |
+Các link dưới đây trỏ tới bản lesson chi tiết trong `lessons/`. Nên học theo thứ tự vì mỗi nhóm dùng contract của nhóm trước.
+
+## Inheritance và object contracts — 091–102
+
+| Bài | Lesson |
+|---:|---|
+| 091 | [Inheritance và IS-A](lessons/091-inheritance-as-is-a.md) |
+| 092 | [Common behavior](lessons/092-inheritance-common-behavior.md) |
+| 093 | [Subclass specialization](lessons/093-subclass-specialization.md) |
+| 094 | [Object contract](lessons/094-object-contract-foundation.md) |
+| 095 | [Worker hierarchy](lessons/095-worker-hierarchy-design.md) |
+| 096 | [Worker specialization](lessons/096-worker-specialization.md) |
+| 097 | [`this` và `super`](lessons/097-this-super-design.md) |
+| 098 | [Overload và override](lessons/098-overload-vs-override-design.md) |
+| 099 | [Text blocks](lessons/099-text-block-presentation.md) |
+| 100 | [String như value](lessons/100-string-as-value.md) |
+| 101 | [String parsing](lessons/101-string-parsing-design.md) |
+| 102 | [StringBuilder output](lessons/102-stringbuilder-output.md) |
+
+## Composition và encapsulation — 103–109
+
+| Bài | Lesson |
+|---:|---|
+| 103 | [Composition và encapsulation](lessons/103-composition-encapsulation-introduction.md) |
+| 104 | [Computer composition](lessons/104-computer-composition.md) |
+| 105 | [Object composition workflow](lessons/105-personal-computer-management.md) |
+| 106 | [Smart Kitchen](lessons/106-smart-kitchen-composition.md) |
+| 107 | [Data hiding](lessons/107-encapsulation-data-hiding.md) |
+| 108 | [State transitions](lessons/108-encapsulation-state-transitions.md) |
+| 109 | [Printer challenge](lessons/109-printer-encapsulation-challenge.md) |
+
+## Polymorphism và OOP challenge — 110–118
+
+| Bài | Lesson |
+|---:|---|
+| 110 | [Movie polymorphism](lessons/110-polymorphism-movie-foundation.md) |
+| 111 | [Factory và runtime types](lessons/111-factory-runtime-types.md) |
+| 112 | [Casting và `var`](lessons/112-casting-and-var.md) |
+| 113 | [`instanceof` pattern](lessons/113-instanceof-pattern-matching.md) |
+| 114 | [Polymorphic cars](lessons/114-polymorphic-cars.md) |
+| 115 | [Cars challenge final](lessons/115-polymorphic-cars-final.md) |
+| 116 | [Burger model](lessons/116-oop-master-burger-model.md) |
+| 117 | [Order aggregate](lessons/117-oop-master-orders.md) |
+| 118 | [Deluxe Burger design](lessons/118-oop-master-deluxe-burger.md) |
+
+## Abstraction và interfaces — 151–165
+
+| Bài | Lesson |
+|---:|---|
+| 151 | [Abstraction và generalization](lessons/151-abstraction-generalization.md) |
+| 152 | [Abstract class và interface](lessons/152-abstract-interface-modifiers.md) |
+| 153 | [Abstract class phần 1](lessons/153-abstract-classes-part-one.md) |
+| 154 | [Abstract class phần 2](lessons/154-abstract-classes-part-two.md) |
+| 155 | [Abstract class phần 3](lessons/155-abstract-classes-part-three.md) |
+| 156 | [Storefront phần 1](lessons/156-abstract-storefront-part-one.md) |
+| 157 | [Storefront phần 2](lessons/157-abstract-storefront-part-two.md) |
+| 158 | [Interface contracts](lessons/158-interfaces-contracts.md) |
+| 159 | [Multiple implementations](lessons/159-interfaces-multiple-implementations.md) |
+| 160 | [Interface constants và conversion](lessons/160-interfaces-constants-conversion.md) |
+| 161 | [Default/static methods](lessons/161-interfaces-default-static.md) |
+| 162 | [Private interface methods](lessons/162-interfaces-private-methods.md) |
+| 163 | [Interface hay abstract class](lessons/163-interface-vs-abstract-class.md) |
+| 164 | [Mapping challenge phần 1](lessons/164-interface-mapping-challenge-one.md) |
+| 165 | [Mapping challenge phần 2](lessons/165-interface-mapping-challenge-two.md) |
+
+## Restricted hierarchy và integration — 246–249
+
+| Bài | Lesson |
+|---:|---|
+| 246 | [`final` classes](lessons/246-final-classes-constructor-access.md) |
+| 247 | [Sealed classes](lessons/247-sealed-classes-hierarchy.md) |
+| 248 | [Pirate game OOP](lessons/248-pirate-game-oop.md) |
+| 249 | [Pirate game final](lessons/249-pirate-game-final-enhancements.md) |
 
 ## Practice
 
-- [Practice index](practice/README.md)
+- [20 bài practice](practice/README.md)
 - [Starter code](practice/code)
 - [Solutions](practice/solutions)
 - [Verifier](practice/verify-solutions.ps1)
-

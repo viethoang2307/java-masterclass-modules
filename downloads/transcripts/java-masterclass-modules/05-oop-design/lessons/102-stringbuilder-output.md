@@ -1,34 +1,30 @@
-# 102 — StringBuilder và output pipeline
+# 102. `StringBuilder` và output động
 
-## Mục tiêu
+## Vì sao cần StringBuilder?
 
-Dùng StringBuilder trong loop và quy tắc separator không trailing delimiter.
+`String` immutable. Nối trong loop bằng `+` có thể tạo nhiều intermediate object; `StringBuilder` giữ buffer mutable và append tuần tự.
 
-## Mental model
+```java
+static String formatNames(List<String> names) {
+    StringBuilder result = new StringBuilder();
+    for (int i = 0; i < names.size(); i++) {
+        if (i > 0) result.append(", ");
+        result.append(names.get(i));
+    }
+    return result.toString();
+}
+```
 
-StringBuilder mutable buffer; domain methods có thể build output rồi return String ở boundary.
+`toString()` tạo snapshot String; caller không thấy builder nội bộ.
 
-## Ví dụ Java 17
+## Chọn công cụ
 
-~~~java
-`StringBuilder b=new StringBuilder(); for(int i=0;i<3;i++){if(i>0)b.append(',');b.append(i);} String out=b.toString();`
-~~~
+`String.join` phù hợp delimiter đơn giản, `StringJoiner` có prefix/suffix, `StringBuilder` phù hợp report nhiều section, còn `Formatter` phù hợp format số/ngày nhưng cần hiểu locale.
 
-## Lỗi thường gặp
+## Bài tập và pitfalls
 
-- Trailing comma.
-- Trả builder ra ngoài.
-- Concat String trong loop lớn.
+Viết `OrderReport` gồm header, line items, total và newline cuối cố định. Test empty list, một item, nhiều item và Unicode. Tránh quên `toString`, delimiter thừa và dùng builder dùng chung giữa threads.
 
-## Bài tập ngắn
+## Checkpoint
 
-Viết CSV builder cho danh sách object.
-
-## Interview prompt
-
-Complexity của concat trong loop khác builder thế nào?
-
-## Nguồn
-
-Transcript course lesson 102; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Formatter là adapter ở rìa hệ thống; domain object không nên bị thiết kế theo cách output hiện tại.

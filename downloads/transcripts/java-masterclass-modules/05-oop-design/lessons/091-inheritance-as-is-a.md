@@ -1,34 +1,45 @@
-# 91 — Inheritance và quan hệ IS-A
+# 091. Inheritance: kiểm tra quan hệ IS-A
 
 ## Mục tiêu
 
-Nhận diện inheritance đúng ngữ nghĩa và dùng superclass/subclass khi substitutability hợp lệ.
+Sau bài này bạn có thể quyết định một subclass có thực sự là một subtype hay chỉ đang tái sử dụng code một cách nguy hiểm. Trọng tâm không phải cú pháp `extends`, mà là contract và khả năng thay thế.
 
 ## Mental model
 
-Inheritance tạo type hierarchy. Subclass nên giữ contract của base; nếu chỉ muốn reuse implementation, composition thường an toàn hơn.
+Inheritance tạo ra quan hệ “mọi đối tượng của `Child` đều có thể được dùng ở nơi cần `Parent`”. Câu hỏi đúng là: nếu caller chỉ biết `Parent`, mọi hành vi hợp lệ của `Child` có còn đúng không? Đây là substitutability, thường gắn với Liskov Substitution Principle.
 
-## Ví dụ Java 17
+```java
+class Vehicle {
+    void start() { System.out.println("engine starts"); }
+}
 
-~~~java
-`abstract class Animal { abstract String move(); }\nfinal class Dog extends Animal { @Override String move(){ return "run"; } }`
-~~~
+class Car extends Vehicle {
+    @Override
+    void start() { System.out.println("car starts"); }
+}
+```
+
+`Car IS-A Vehicle` vì `Car` giữ được ý nghĩa của `start`. Nếu `Vehicle` có `refuel()` nhưng subclass là xe điện và ném `UnsupportedOperationException`, hierarchy đã nói dối caller.
+
+## Cách phân tích trước khi dùng `extends`
+
+1. Viết contract của base type bằng các hành vi caller được phép gọi.
+2. Liệt kê invariant của base type.
+3. Kiểm tra subclass có thể giữ mọi precondition/postcondition không.
+4. Nếu chỉ muốn dùng chung implementation, thử composition hoặc delegation.
 
 ## Lỗi thường gặp
 
-- Dùng inheritance cho HAS-A.
-- Subclass phá precondition của base.
-- Copy-paste thay vì reuse contract.
+- Dùng inheritance chỉ vì hai class có vài field giống nhau.
+- Cho base class quá nhiều method khiến subclass phải override bằng exception.
+- Override method nhưng thu hẹp input hợp lệ hoặc thay đổi ý nghĩa return.
 
-## Bài tập ngắn
+## Bài tập và checkpoint
 
-Viết Animal/Dog/Cat và test qua Animal reference.
+Phân tích `Bird`/`Penguin` và `Payment`/`CashPayment`. Viết một hierarchy đúng và một ví dụ nên chuyển sang interface hoặc composition. Nếu bạn phải viết `instanceof` để dùng subtype trong hầu hết consumer, abstraction có thể đang sai.
 
-## Interview prompt
+## Tham khảo
 
-Khi nào composition tốt hơn inheritance?
-
-## Nguồn
-
-Transcript course lesson 91; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+- Transcript bài 091.
+- Java Language Specification 17, class inheritance.
+- Oracle, Inheritance.

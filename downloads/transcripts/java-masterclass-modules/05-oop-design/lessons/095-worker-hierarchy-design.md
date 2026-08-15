@@ -1,34 +1,48 @@
-# 95 — Worker hierarchy design
+# 095. Thiết kế worker hierarchy
 
-## Mục tiêu
+## Bối cảnh
 
-Mô hình hóa Worker với common identity và pay policy cho nhiều loại worker.
+Worker có dữ liệu chung như name/ID, nhưng cách tính pay khác nhau. Đây là ví dụ để phân biệt inheritance hợp lý với conditional code.
 
-## Mental model
+```java
+abstract class Worker {
+    private final String id;
+    private final String name;
+    protected Worker(String id, String name) {
+        if (id == null || id.isBlank() || name == null || name.isBlank())
+            throw new IllegalArgumentException("worker identity");
+        this.id = id.strip(); this.name = name.strip();
+    }
+    public final String id() { return id; }
+    public final String name() { return name; }
+    public abstract long calculatePayCents();
+}
+```
 
-Đầu tiên viết contract pay(); sau đó chọn abstract base nếu có common state. Payroll service chỉ nhận Worker.
+## Vì sao không dùng một class với `workerType`?
 
-## Ví dụ Java 17
+Một class có `if (type == HOURLY) ... else if ...` sẽ phải sửa mỗi khi thêm loại worker. Polymorphism đưa variation vào subtype; consumer chỉ gọi `calculatePayCents()`.
 
-~~~java
-`abstract class Worker { abstract long pay(); }\nfinal class Employee extends Worker { long pay(){return 1000;} }`
-~~~
+```java
+static long payroll(List<Worker> workers) {
+    long total = 0;
+    for (Worker worker : workers) total = Math.addExact(total, worker.calculatePayCents());
+    return total;
+}
+```
 
-## Lỗi thường gặp
+Loop không biết subtype, nên thêm worker mới không cần sửa payroll. Tiền dùng cents và phép tính nên kiểm soát overflow.
 
-- Base class quá lớn.
-- Payroll switch theo subtype.
-- Không validate pay input.
+## Test matrix
 
-## Bài tập ngắn
+Test worker null, ID rỗng, boundary hours, negative rate, overflow và xử lý qua `Worker` reference. Đừng chỉ test concrete class.
 
-Tạo Employee/Contractor/Manager và tổng pay polymorphic.
+## Bài tập
 
-## Interview prompt
+Thêm `CommissionWorker` và chứng minh code payroll không đổi. Viết report theo ID có ordering deterministic.
 
-Abstract class mang lại gì ngoài code reuse?
+## Pitfalls
 
-## Nguồn
-
-Transcript course lesson 95; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+- Dùng `calculatePay` static, làm mất runtime dispatch.
+- Cho subclass sửa ID bằng setter.
+- Để base class phụ thuộc vào mọi chi tiết pay của subtype.

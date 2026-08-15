@@ -1,34 +1,34 @@
-# 153 — Abstract Classes Part 1
+# 153. Abstract classes phần 1: shared state và template
 
-## Mục tiêu
+## Ví dụ
 
-Tạo base abstract class có common state và abstract behavior.
+```java
+abstract class Payment {
+    private final long amountCents;
+    protected Payment(long amountCents) {
+        if (amountCents <= 0) throw new IllegalArgumentException("amount");
+        this.amountCents = amountCents;
+    }
+    public final long amountCents() { return amountCents; }
+    public final Receipt pay() {
+        validate();
+        return perform();
+    }
+    protected void validate() {}
+    protected abstract Receipt perform();
+}
+```
 
-## Mental model
+`pay()` là template method bảo vệ sequence; subtype chỉ implement `perform`. Base giữ amount và invariant chung.
 
-Abstract type không new trực tiếp; constructor base vẫn chạy khi new subclass. Template method có thể giữ algorithm skeleton.
+## Hook method
 
-## Ví dụ Java 17
+Hook mặc định rỗng nên dùng khi optional extension có ý nghĩa. Nếu hook không liên quan tới nhiều subtype, interface hoặc composition có thể rõ hơn.
 
-~~~java
-`abstract class Report { final String render(){return header()+body();} abstract String body(); String header(){return "REPORT";} }`
-~~~
+## Bài tập
+
+Thêm `CardPayment` và `CashPayment`; test `pay()` luôn validate trước perform. Tạo fake gateway để không phụ thuộc network.
 
 ## Lỗi thường gặp
 
-- Gọi new abstract class.
-- Abstract method có body sai syntax.
-- Subclass không gọi base constructor.
-
-## Bài tập ngắn
-
-Viết Report template method cho 2 report types.
-
-## Interview prompt
-
-Abstract class có constructor được không?
-
-## Nguồn
-
-Transcript course lesson 153; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Gọi method override trong constructor, để subclass tự set base fields, và cho phép override `pay()` phá sequence.

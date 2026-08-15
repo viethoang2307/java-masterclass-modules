@@ -1,34 +1,24 @@
-# 164 — Interface challenge — Mapping Part 1
+# 164. Interface mapping challenge phần 1
 
-## Mục tiêu
+## Bài toán
 
-Xây Mappable classes có map() và service xử lý danh sách interface.
+Map domain object sang DTO qua interface để consumer không phụ thuộc class cụ thể:
 
-## Mental model
+```java
+interface Mapper<S, T> {
+    T map(S source);
+}
 
-Map contract nên deterministic, không phụ thuộc concrete type. Data validation nằm trong object constructor.
+record User(String id, String email) {}
+record UserDto(String id, String maskedEmail) {}
+```
 
-## Ví dụ Java 17
+`UserMapper implements Mapper<User, UserDto>` giữ mapping policy riêng. Domain object không cần biết JSON/HTTP DTO.
 
-~~~java
-`interface Mappable { String map(); }\nstatic String all(Mappable... xs){var b=new StringBuilder();for(var x:xs)b.append(x.map());return b.toString();}`
-~~~
+## Null và validation
 
-## Lỗi thường gặp
+Mapper phải document null: reject bằng `Objects.requireNonNull`, trả null, hoặc Result. Không map object thiếu invariant thành DTO có vẻ hợp lệ.
 
-- Service instanceof.
-- Map output không stable.
-- Null element.
+## Bài tập
 
-## Bài tập ngắn
-
-Tạo Location/User mappable và mapping report.
-
-## Interview prompt
-
-Interface test nên assert behavior nào?
-
-## Nguồn
-
-Transcript course lesson 164; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Viết mapper order→receipt DTO, inject `PriceFormatter`, test nested line items và immutable output. Tạo fake formatter để kiểm tra dependency.

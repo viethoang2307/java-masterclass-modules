@@ -1,34 +1,38 @@
-# 112 — Advanced casting và var
+# 112. Casting và `var`
 
-## Mục tiêu
+## Upcast
 
-Phân biệt upcast, downcast, cast failure và local var inference.
+Upcast từ subtype lên base an toàn và implicit:
 
-## Mental model
+```java
+Adventure adventure = new Adventure("Quest");
+Movie movie = adventure;
+```
 
-Upcast an toàn; downcast cần chứng minh runtime type. var vẫn static type được compiler suy ra, không phải dynamic typing.
+Compiler chỉ cho gọi API của `Movie`, nhưng override vẫn dispatch runtime.
 
-## Ví dụ Java 17
+## Downcast
 
-~~~java
-`Movie movie=new Adventure(); Adventure a=(Adventure)movie; var same=movie;`
-~~~
+Downcast cần runtime object thật sự là subtype:
 
-## Lỗi thường gặp
+```java
+if (movie instanceof Adventure adventure) {
+    adventure.specialMove();
+}
+```
 
-- Cast sibling type.
-- Tưởng var là Object/dynamic.
-- Không kiểm tra instanceof trước downcast.
+Cast mù `((Adventure) movie)` có thể ném `ClassCastException`. Nếu downcast xuất hiện thường xuyên, base contract thiếu capability hoặc hierarchy sai.
 
-## Bài tập ngắn
+## `var`
 
-Tạo casting table hợp lệ/invalid và giải thích compile/runtime error.
+`var` chỉ suy luận local variable lúc compile-time; không biến Java thành dynamic typing:
 
-## Interview prompt
+```java
+var movie = createMovie("A", "Quest"); // static type Movie nếu factory trả Movie
+```
 
-ClassCastException xảy ra khi nào?
+Không dùng `var` cho field, parameter hay return type. `var x = null` không compile vì compiler không suy ra type.
 
-## Nguồn
+## Bài tập
 
-Transcript course lesson 112; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Viết bảng static/runtime type cho các biến `Movie`, `Adventure`, `var`. Tách một consumer đang downcast thành interface capability.

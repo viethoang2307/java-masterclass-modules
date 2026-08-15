@@ -1,34 +1,25 @@
-# 111 — Factory methods và runtime types
+# 111. Factory và runtime types
 
-## Mục tiêu
+## Vì sao dùng factory?
 
-Dùng factory trả về base type và hiểu object runtime type khác compile-time type.
+Factory gom logic chọn concrete implementation ở composition root, để phần còn lại chỉ làm việc với abstraction.
 
-## Mental model
+```java
+static Movie createMovie(String code, String title) {
+    return switch (code.strip().toUpperCase(Locale.ROOT)) {
+        case "A" -> new Adventure(title);
+        case "C" -> new Comedy(title);
+        default -> throw new IllegalArgumentException("unknown movie code");
+    };
+}
+```
 
-Factory centralizes selection; caller phụ thuộc abstraction. Downcast chỉ khi capability không nằm trong base contract.
+Caller nhận `Movie`, còn runtime type là `Adventure` hoặc `Comedy`. Factory không làm polymorphism; nó chỉ tạo object đúng subtype.
 
-## Ví dụ Java 17
+## Static và runtime type
 
-~~~java
-`static Movie randomMovie(int n){return switch(n){case 1->new Adventure();default->new Movie();};}`
-~~~
+Static type quyết định method nào compile được; runtime type quyết định override nào chạy. Đừng expose factory trả `Object`, vì làm mất compile-time contract.
 
-## Lỗi thường gặp
+## Test và bài tập
 
-- Factory trả Object.
-- Caller instanceof mọi nơi.
-- Randomness làm test nondeterministic.
-
-## Bài tập ngắn
-
-Viết deterministic factory theo code và test subtype behavior.
-
-## Interview prompt
-
-Compile-time type giới hạn lời gọi method thế nào?
-
-## Nguồn
-
-Transcript course lesson 111; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Test code hợp lệ, code không biết, whitespace/case và object behavior chứ không chỉ class name. Tạo `PaymentFactory` từ code `CARD`, `CASH`, `BANK`; viết consumer chỉ phụ thuộc `PaymentMethod`.

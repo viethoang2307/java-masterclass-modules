@@ -1,34 +1,31 @@
-# 101 — String parsing design
+# 101. String parsing: từ text tới domain object
 
-## Mục tiêu
+## Parsing và validation
 
-Parse String bằng index/substring với validation và failure contract rõ.
+Parsing trả lời text có cấu trúc gì; validation trả lời giá trị có được domain cho phép không. Tách hai ý giúp error rõ:
 
-## Mental model
+```java
+record Coordinate(int x, int y) {}
 
-Parser là anti-corruption boundary: text không tin cậy -> typed value hoặc null/result. Validate index trước substring.
+static Coordinate parse(String text) {
+    if (text == null) throw new IllegalArgumentException("null coordinate");
+    String[] parts = text.strip().split(",", -1);
+    if (parts.length != 2) throw new IllegalArgumentException("expected x,y");
+    try {
+        return new Coordinate(Integer.parseInt(parts[0].strip()),
+                              Integer.parseInt(parts[1].strip()));
+    } catch (NumberFormatException ex) {
+        throw new IllegalArgumentException("invalid integer", ex);
+    }
+}
+```
 
-## Ví dụ Java 17
+`split(..., -1)` giữ empty trailing field. Không nuốt exception rồi trả zero/null giả; lỗi nên chỉ ra field/index mà không log secret.
 
-~~~java
-`static String valueOf(String line){ int i=line.indexOf('='); return i<0?null:line.substring(i+1).strip(); }`
-~~~
+## Khi regex phù hợp
 
-## Lỗi thường gặp
+Regex tốt cho token pattern đơn giản. Format có quoting, escape hoặc nested delimiter nên dùng parser state machine thay vì regex khổng lồ.
 
-- substring out of bounds.
-- split regex không đúng.
-- Throw exception không được document.
+## Bài tập
 
-## Bài tập ngắn
-
-Viết parser key=value có value chứa dấu =.
-
-## Interview prompt
-
-Parser nên return null, Optional hay throw?
-
-## Nguồn
-
-Transcript course lesson 101; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Parse `sku=J17;qty=3`, reject duplicate key, missing field, quantity âm và delimiter trong value. Test whitespace và Unicode.

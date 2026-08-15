@@ -1,34 +1,25 @@
-# 117 — OOP master challenge — Meal orders
+# 117. Order aggregate và pricing
 
-## Mục tiêu
+## Aggregate boundary
 
-Xây order workflow với addMeal, totalPrice và formatted receipt.
+`Order` sở hữu line items và status; caller không được tự sửa list hoặc tổng tiền.
 
-## Mental model
+```java
+final class Order {
+    private final List<LineItem> lines = new ArrayList<>();
+    private OrderStatus status = OrderStatus.DRAFT;
+    void add(LineItem line) { requireDraft(); lines.add(Objects.requireNonNull(line)); }
+    List<LineItem> lines() { return List.copyOf(lines); }
+    long totalCents() { return lines.stream().mapToLong(LineItem::subtotalCents).reduce(0, Math::addExact); }
+}
+```
 
-Receipt là presentation boundary; domain objects trả data/price. Command methods validate item count và menu rules.
+Draft mới được add; submitted không sửa. `totalCents` tính từ line items để tránh cached total drift, hoặc cached total phải update atomically.
 
-## Ví dụ Java 17
+## Bài tập
 
-~~~java
-`final class Meal { private final Burger burger; long price(){return burger.price()+2;} }`
-~~~
+Thêm `submit`, `cancel`, `pay`; test transition matrix và failure không mutate. Tạo receipt immutable khi checkout.
 
 ## Lỗi thường gặp
 
-- Receipt logic mutate order.
-- Không snapshot order.
-- Magic price rải code.
-
-## Bài tập ngắn
-
-Thêm MealOrder và StringBuilder receipt deterministic.
-
-## Interview prompt
-
-Làm sao test pricing mà không assert toàn bộ receipt?
-
-## Nguồn
-
-Transcript course lesson 117; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Trả internal `ArrayList`, cho caller set `status`, tính total ở UI hoặc cho discount sửa trực tiếp line price mà không có audit đều phá aggregate boundary.

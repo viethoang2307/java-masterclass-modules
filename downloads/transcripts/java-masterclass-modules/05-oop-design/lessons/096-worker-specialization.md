@@ -1,34 +1,37 @@
-# 96 — Specialized workers
+# 096. Worker specialization: hourly và salaried
 
-## Mục tiêu
+## Validate ở boundary
 
-Hoàn thiện subtype behavior và đảm bảo collection base type vẫn hoạt động.
+Subtype nên giữ dữ liệu riêng và validate trong constructor:
 
-## Mental model
+```java
+final class HourlyWorker extends Worker {
+    private final long rateCents;
+    private final int hours;
+    HourlyWorker(String id, String name, long rateCents, int hours) {
+        super(id, name);
+        if (rateCents < 0 || hours < 0 || hours > 744)
+            throw new IllegalArgumentException("work range");
+        this.rateCents = rateCents; this.hours = hours;
+    }
+    @Override public long calculatePayCents() {
+        return Math.multiplyExact(rateCents, hours);
+    }
+}
+```
 
-Dynamic dispatch cho phép thêm subtype không sửa payroll loop. Hãy test subtype mới bằng contract test.
+`SalariedWorker` giữ monthly salary và không cần hours. Cả hai cùng thực hiện một contract nhưng khác algorithm. Constructor bảo vệ giá trị bất biến; payroll service giữ policy chung.
 
-## Ví dụ Java 17
+## Khi hierarchy bắt đầu phình
 
-~~~java
-`static long total(Worker... workers){ long x=0; for(Worker w:workers)x+=w.pay(); return x; }`
-~~~
+Nếu pay cần tax, overtime, bonus và currency, đừng nhồi mọi policy vào `Worker`. Tách `PayPolicy`, `Money` hoặc value object để hierarchy giữ nhỏ. Inheritance nên biểu diễn variation ổn định, không phải mọi thay đổi nghiệp vụ.
+
+## Bài tập
+
+Tạo worker nhận `PayPolicy` bằng composition. So sánh testability với subclass và viết một test thay policy mà không tạo class mới.
 
 ## Lỗi thường gặp
 
-- Hard-code subtype list.
-- Không test zero/negative.
-- Override method có side effect bất ngờ.
-
-## Bài tập ngắn
-
-Thêm HourlyWorker mà không sửa total().
-
-## Interview prompt
-
-Open/Closed Principle liên quan thế nào?
-
-## Nguồn
-
-Transcript course lesson 96; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+- Dùng field `type` trong base rồi lại switch.
+- Constructor subtype gọi method overridable của base.
+- Test không đi qua base reference.

@@ -1,34 +1,28 @@
-# 162 — Interface private methods
+# 162. Private interface methods
 
-## Mục tiêu
+## Vì sao cần private helper?
 
-Dùng private interface helper để chia sẻ logic giữa default methods mà không public API.
+Java 9+ cho phép private method trong interface để share logic giữa default methods mà không publicize helper:
 
-## Mental model
+```java
+interface Reportable {
+    String name();
+    default String compact() { return normalize(name()); }
+    default String detailed() { return "NAME=" + normalize(name()); }
+    private String normalize(String value) { return value.strip(); }
+}
+```
 
-Private interface method chỉ phục vụ implementation của interface; không visible cho implementing class.
+Private method không phải API cho implementation class; nó chỉ là implementation detail của interface.
 
-## Ví dụ Java 17
+## Khi nên chuyển sang class
 
-~~~java
-`interface Auditable { String id(); default String audit(){return wrap(id());} private String wrap(String s){return "["+s+"]";} }`
-~~~
+Nếu private helper bắt đầu giữ nhiều state/policy, interface có thể đang làm quá nhiều. Tách formatter/service để test độc lập.
 
-## Lỗi thường gặp
+## Bài tập
 
-- Implementer gọi private helper.
-- Expose helper không cần thiết.
-- Static/private nhầm modifier.
+Viết interface `Renderable` có hai default format dùng helper private; test null và whitespace contract.
 
-## Bài tập ngắn
+## Pitfalls
 
-Tạo interface có hai default methods dùng chung private formatter.
-
-## Interview prompt
-
-Private interface method có được abstract không?
-
-## Nguồn
-
-Transcript course lesson 162; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Nhầm private interface method với abstract method, hoặc dùng default method để thay một abstract class có shared mutable state.

@@ -1,34 +1,53 @@
-# 104 — Computer với composition
+# 104. Computer composition: thiết kế parts và orchestration
 
-## Mục tiêu
+## Domain model
 
-Thiết kế một aggregate có components và methods delegate behavior có kiểm soát.
+```java
+final class Monitor {
+    private final String model;
+    Monitor(String model) { this.model = require(model); }
+    void turnOn() { System.out.println(model + " monitor on"); }
+    private static String require(String value) {
+        if (value == null || value.isBlank()) throw new IllegalArgumentException("model");
+        return value.strip();
+    }
+}
 
-## Mental model
+final class Computer {
+    private final Monitor monitor;
+    Computer(Monitor monitor) { this.monitor = Objects.requireNonNull(monitor); }
+    void start() { monitor.turnOn(); }
+}
+```
 
-Outer object giữ invariant của composition: components không null, command đi qua boundary, dependency có role rõ.
+`Computer` orchestrates startup; `Monitor` chịu trách nhiệm behavior của monitor. Đây là delegation, không phải inheritance.
 
-## Ví dụ Java 17
+## Constructor injection
 
-~~~java
-`final class Computer { private final Monitor monitor; String boot(){return monitor.on()+"/boot";} }`
-~~~
+Nhận `Monitor` từ ngoài giúp test:
 
-## Lỗi thường gặp
+```java
+final class RecordingMonitor extends Monitor {
+    boolean started;
+    RecordingMonitor() { super("fake"); }
+    @Override void turnOn() { started = true; }
+}
+```
 
-- new component rải trong methods.
-- Null component.
-- Getter trả mọi internal object.
+Trong code production, có thể dùng interface `Display` nếu nhiều loại monitor không có shared implementation.
 
-## Bài tập ngắn
+## Câu hỏi thiết kế
 
-Tạo Computer boot/shutdown và fake component cho self-check.
+- Computer có sở hữu lifecycle của monitor hay chỉ dùng monitor shared?
+- Có được thay monitor sau constructor không?
+- `start()` có cần idempotent không?
 
-## Interview prompt
+## Bài tập
 
-Dependency injection giúp test composition thế nào?
+Thêm `Motherboard`, `Keyboard`, `PowerSupply` và viết startup sequence. Test thứ tự bằng recording fakes, không phụ thuộc console timing.
 
-## Nguồn
+## Pitfalls
 
-Transcript course lesson 104; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+- Part tự tìm dependency bằng `new` bên trong, làm test khó.
+- Computer biết quá nhiều chi tiết internals của parts.
+- State startup nửa vời nhưng không có transition contract.

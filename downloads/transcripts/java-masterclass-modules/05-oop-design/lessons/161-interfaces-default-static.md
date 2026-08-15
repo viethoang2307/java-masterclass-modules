@@ -1,34 +1,35 @@
-# 161 — Interface default và static methods
+# 161. Default và static methods trong interface
 
-## Mục tiêu
+## Default method
 
-Dùng default method cho behavior backwards-compatible; static method cho helper gắn với interface.
+Default method cho phép thêm behavior có implementation mà không phá mọi implementation cũ:
 
-## Mental model
+```java
+interface Auditable {
+    String id();
+    default String auditKey() { return "AUDIT:" + id(); }
+}
+```
 
-Default method có thể bị override; static interface method gọi qua InterfaceName, không qua instance.
+Dùng cho behavior derivable từ contract, không dùng để nhét business state vào interface.
 
-## Ví dụ Java 17
+## Static method
 
-~~~java
-`interface Describable { String name(); default String description(){return name();} static boolean valid(String s){return s!=null&&!s.isBlank();} }`
-~~~
+Static interface method được gọi qua interface, không qua instance:
 
-## Lỗi thường gặp
+```java
+interface MoneyRules {
+    static long requireNonNegative(long cents) {
+        if (cents < 0) throw new IllegalArgumentException("negative");
+        return cents;
+    }
+}
+```
 
-- Gọi static interface method qua object.
-- Default diamond conflict.
-- Default method che giấu breaking behavior.
+## Conflict
 
-## Bài tập ngắn
+Một class implement hai interface có cùng default signature phải override và resolve conflict. Class method thắng interface default.
 
-Tạo hai implementation dùng default và một override.
+## Bài tập
 
-## Interview prompt
-
-Nếu hai interface có cùng default method thì xử lý sao?
-
-## Nguồn
-
-Transcript course lesson 161; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Tạo hai interface có default `label()`, implement chung và resolve rõ bằng `InterfaceA.super.label()` hoặc implementation mới.

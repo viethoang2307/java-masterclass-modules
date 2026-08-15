@@ -1,34 +1,37 @@
-# 100 — String như value object
+# 100. `String` như value object
 
-## Mục tiêu
+## Đặc tính
 
-Dùng String immutable đúng cách trong domain và không nhầm identity với equality.
+`String` immutable, `final` và có value equality. Method như `strip`, `toLowerCase`, `substring` không mutate instance cũ.
 
-## Mental model
+```java
+String raw = " Java ";
+String cleaned = raw.strip();
+System.out.println(raw);     // vẫn có whitespace
+System.out.println(cleaned); // Java
+```
 
-String là immutable; operation trả object mới. Domain identifier nên normalize tại boundary rồi giữ final.
+## `equals` và `==`
 
-## Ví dụ Java 17
+```java
+String a = new String("java");
+String b = new String("java");
+System.out.println(a == b);      // false
+System.out.println(a.equals(b)); // true
+```
 
-~~~java
-`final class Code { private final String value; Code(String v){value=v.strip().toUpperCase();} }`
-~~~
+String pool làm `==` đôi khi có vẻ đúng với literal, nhưng không phải contract để so nội dung.
 
-## Lỗi thường gặp
+## Normalize ở boundary
 
-- Dùng ==.
-- Bỏ qua return của strip/replace.
-- Normalize ở nhiều nơi không nhất quán.
+```java
+record Username(String value) {
+    Username { value = value.strip().toLowerCase(Locale.ROOT); }
+}
+```
 
-## Bài tập ngắn
+Không normalize lúc insert một kiểu và lúc lookup một kiểu khác. `Locale.ROOT` tránh locale máy làm thay đổi identifier.
 
-Tạo ProductCode normalize một lần, equals theo value.
+## Security và bài tập
 
-## Interview prompt
-
-Tại sao immutable String an toàn khi share?
-
-## Nguồn
-
-Transcript course lesson 100; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+String phù hợp làm key vì immutable, nhưng password không nên xuất hiện trong `toString`. Viết `EmailAddress`, reject whitespace nội bộ, normalize domain và test equality trong `HashMap`.

@@ -1,34 +1,32 @@
-# 118 — Deluxe Burger bonus
+# 118. Deluxe Burger và quyết định inheritance/composition
 
-## Mục tiêu
+## Câu hỏi design
 
-Mở rộng model bằng DeluxeBurger giới hạn topping và surcharge mà không phá Burger contract.
+Deluxe burger có phải subtype không? Nếu mọi code nhận `Burger` đều dùng được deluxe và deluxe chỉ thêm preset/giới hạn mà không phá behavior, inheritance có thể hợp lệ. Nếu chỉ là một cấu hình, factory/composition phù hợp hơn.
 
-## Mental model
+```java
+static Burger deluxeBurger() {
+    Burger burger = new Burger("Deluxe");
+    burger.addTopping(new Topping("cheese", 100));
+    burger.addTopping(new Topping("bacon", 150));
+    return burger;
+}
+```
 
-Một subtype tốt vẫn là Burger theo price/topping contract. Nếu subtype cần override behavior, invariant phải mạnh hoặc bằng base.
+Factory tạo object thường, tránh subclass chỉ để gọi constructor khác.
 
-## Ví dụ Java 17
+## Pricing và extensibility
 
-~~~java
-`final class DeluxeBurger extends Burger { DeluxeBurger(){super(10);} }`
-~~~
+Nếu price thay đổi theo campaign, inject `PricingPolicy` thay vì override `price()` trong nhiều subclass:
 
-## Lỗi thường gặp
+```java
+interface PricingPolicy { long priceOf(Burger burger); }
+```
 
-- Deluxe override làm price âm.
-- Caller cast Deluxe everywhere.
-- Base fields private khiến subclass không có API phù hợp.
+## Capstone checklist
 
-## Bài tập ngắn
+Value object cho money/name, aggregate bảo vệ list/status, calculator không dùng floating point, formatter tách domain và self-check có invalid input/state transition/overflow.
 
-Thêm DeluxeBurger và test base-reference pricing.
+## Bài tập
 
-## Interview prompt
-
-Inheritance hay composition phù hợp hơn cho menu variants?
-
-## Nguồn
-
-Transcript course lesson 118; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Viết review memo so sánh subclass `DeluxeBurger` với factory/composition về test, API và thay đổi pricing.

@@ -1,34 +1,28 @@
-# 160 — Interfaces Part 3 — Constants và conversion
+# 160. Interface constants và type conversion
 
-## Mục tiêu
+## Constants
 
-Hiểu static final constants và conversion methods; tránh constant interface anti-pattern.
+Field trong interface mặc định là `public static final`. Dùng cho constant thật sự thuộc contract, không dùng interface như namespace tiện lợi:
 
-## Mental model
+```java
+interface HttpStatus {
+    int OK = 200;
+    int BAD_REQUEST = 400;
+}
+```
 
-Constants nên thuộc domain type hoặc utility holder; interface chủ yếu là behavior contract, không phải namespace constants.
+Nếu constant thuộc một domain type, enum hoặc utility class thường rõ hơn.
 
-## Ví dụ Java 17
+## Conversion và capability
 
-~~~java
-`interface Temperature { double celsius(); default double fahrenheit(){return celsius()*9/5+32;} }`
-~~~
+Interface reference có thể upcast object implementer:
 
-## Lỗi thường gặp
+```java
+Exportable exportable = new CsvExporter();
+```
 
-- 9/5 integer division.
-- Implementer không giữ unit invariant.
-- Dùng interface chỉ để inherit constants.
+Downcast để lấy API đặc thù nên hiếm. Nếu consumer cần method đó, thêm capability interface hoặc đổi contract.
 
-## Bài tập ngắn
+## Bài tập
 
-Tạo UnitValue interface với default conversion chính xác.
-
-## Interview prompt
-
-Default method có nên chứa business policy không?
-
-## Nguồn
-
-Transcript course lesson 160; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Audit một interface đang chứa 20 constants và nhiều static helper. Tách enum, utility và capability; viết lý do cho từng move.

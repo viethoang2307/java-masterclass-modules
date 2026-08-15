@@ -1,34 +1,52 @@
-# 92 — Common behavior trong hierarchy
+# 092. Tách common behavior trong hierarchy
 
 ## Mục tiêu
 
-Đặt state/behavior chung vào superclass mà không biến base thành god class.
+Biết đặt state và behavior dùng chung ở base class, đồng thời tránh biến base class thành god class.
 
-## Mental model
+## Ví dụ
 
-Superclass là abstraction nhỏ nhất đủ dùng. Private fields bảo vệ state; protected API chỉ mở khi subclass thực sự cần.
+```java
+abstract class Employee {
+    private final String name;
+    protected Employee(String name) {
+        if (name == null || name.isBlank()) throw new IllegalArgumentException("name");
+        this.name = name.strip();
+    }
+    public final String name() { return name; }
+    public abstract long monthlyPayCents();
+}
+```
 
-## Ví dụ Java 17
+`name` là invariant chung nên được validate một lần ở constructor. `monthlyPayCents` là variation point: base biết employee nào cũng có lương nhưng không áp đặt công thức cho mọi loại.
 
-~~~java
-`class Animal { private final String name; Animal(String name){this.name=name;} String name(){return name;} }`
-~~~
+## Template method và quyền mở rộng
 
-## Lỗi thường gặp
+```java
+abstract class Report {
+    public final String render() {
+        return header() + "\n" + body();
+    }
+    protected abstract String body();
+    protected String header() { return "REPORT"; }
+}
+```
 
-- Base biết chi tiết subtype.
-- Protected fields bị subclass mutate.
-- Constructor base không validate.
+Đánh dấu `final` cho method nếu invariant của algorithm không được phép bị phá. Chỉ mở `protected` khi subclass thật sự cần extension point; `protected` field thường tạo coupling mạnh hơn protected method.
 
-## Bài tập ngắn
+## Thiết kế thực tế
 
-Refactor hai subtype có duplicate name validation vào base.
+- Base class giữ dữ liệu bất biến và quy tắc chung.
+- Subclass chỉ cung cấp phần biến đổi nhỏ.
+- Không để subclass truy cập trực tiếp mutable collection nội bộ.
+- Constructor base phải hoàn tất invariant trước khi subclass dùng object.
 
-## Interview prompt
+## Pitfalls
 
-Private và protected khác nhau thế nào trong hierarchy?
+- Gọi overridable method trong constructor khi subclass state chưa khởi tạo.
+- Base class chứa mọi field của mọi subtype.
+- Dùng `protected` field cho phép subclass thay state tùy ý.
 
-## Nguồn
+## Bài tập
 
-Transcript course lesson 92; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Thiết kế `Notification` với `recipient` chung và `renderBody()` khác nhau cho email/SMS. Đánh dấu method nào `final`, `protected`, `public` và giải thích vì sao.

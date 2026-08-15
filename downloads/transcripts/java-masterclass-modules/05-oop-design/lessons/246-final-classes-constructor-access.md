@@ -1,34 +1,34 @@
-# 246 — Final classes và constructor access
+# 246. `final` classes và constructor access
 
-## Mục tiêu
+## `final` là design statement
 
-Dùng final class/method/field và constructor access để giới hạn extension, mutation và creation.
+`final class` không thể bị subclass. Dùng khi invariant/security/representation không cho phép mở rộng:
 
-## Mental model
+```java
+public final class Money {
+    private final String currency;
+    private final long cents;
+    public Money(String currency, long cents) {
+        if (currency == null || currency.isBlank() || cents < 0)
+            throw new IllegalArgumentException("money");
+        this.currency = currency.strip(); this.cents = cents;
+    }
+    public long cents() { return cents; }
+}
+```
 
-final class không thể extends; final method không override; final reference không đổi object reference nhưng object có thể mutable. Private constructor kiểm soát factory.
+Private fields + no setters + final class làm value object dễ reasoning. Nếu class không final nhưng equality dùng `getClass`, subtype có thể tạo semantics kỳ lạ.
 
-## Ví dụ Java 17
+## Constructor access
 
-~~~java
-`final class Token { private final String value; private Token(String v){value=v;} static Token of(String v){return new Token(v);} }`
-~~~
+Private constructor + static factory kiểm soát creation:
 
-## Lỗi thường gặp
+```java
+public static Money usd(long cents) { return new Money("USD", cents); }
+```
 
-- Nghĩ final object immutable deep.
-- Final method không thể overload.
-- Private constructor làm class không tạo được nhưng quên factory.
+Package-private constructor phù hợp khi chỉ factory trong package được tạo object. Đây là API boundary.
 
-## Bài tập ngắn
+## Bài tập
 
-Thiết kế Token/Utility final và test creation path.
-
-## Interview prompt
-
-final reference khác immutable object thế nào?
-
-## Nguồn
-
-Transcript course lesson 246; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Thiết kế `EmailAddress` final, factory normalize, constructor không để invalid state. Test không thể subclass và equality ổn định.

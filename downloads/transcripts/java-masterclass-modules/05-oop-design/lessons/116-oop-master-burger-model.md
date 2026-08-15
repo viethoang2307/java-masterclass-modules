@@ -1,34 +1,31 @@
-# 116 — OOP master challenge — Burger model
+# 116. Burger model: composition trong domain nhiều option
 
-## Mục tiêu
+## Model
 
-Phân rã burger/meal/order domain thành objects có composition và price behavior.
+Burger có bread, meat và toppings. Topping là collection nhưng burger phải kiểm soát quantity/price:
 
-## Mental model
+```java
+record Topping(String name, long priceCents) {}
 
-Burger có base price + toppings; Meal chứa burger/drink/side; Order chứa meals. Mỗi object tính phần mình, outer object aggregate.
+final class Burger {
+    private final String name;
+    private final List<Topping> toppings = new ArrayList<>();
+    Burger(String name) { this.name = require(name); }
+    void addTopping(Topping topping) {
+        Objects.requireNonNull(topping);
+        if (toppings.size() == 4) throw new IllegalStateException("maximum toppings");
+        toppings.add(topping);
+    }
+    long priceCents() { return ...; }
+}
+```
 
-## Ví dụ Java 17
+Burger có thể mutable trong lúc build nhưng phải expose snapshot và chốt order trước checkout. Nếu reasoning về state quan trọng hơn convenience, dùng immutable builder.
 
-~~~java
-`final class Burger { private final java.util.List<String> toppings=new java.util.ArrayList<>(); long price(){return 5+toppings.size();} }`
-~~~
+## Composition thay inheritance
 
-## Lỗi thường gặp
+`DeluxeBurger` chỉ nên là subtype nếu mọi code nhận `Burger` đều dùng được. Nếu khác biệt chỉ là preset toppings, factory tạo `Burger` thường đơn giản hơn.
 
-- Order tự tính mọi price detail.
-- Mutable list leak.
-- Topping duplicate rule không rõ.
+## Money và bài tập
 
-## Bài tập ngắn
-
-Model Burger/Drink/Meal và tính price qua composition.
-
-## Interview prompt
-
-Aggregate root nên chịu trách nhiệm gì?
-
-## Nguồn
-
-Transcript course lesson 116; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Dùng cents và `Math.addExact`, không dùng `double`. Thiết kế builder reject duplicate topping, giới hạn 4 topping và trả immutable receipt line.

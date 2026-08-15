@@ -1,34 +1,35 @@
-# 110 — Polymorphism với Movie subclasses
+# 110. Polymorphism với Movie
 
 ## Mục tiêu
 
-Dùng base Movie reference gọi behavior khác nhau ở RegularMovie/AdventureMovie/ComedyMovie.
+Polymorphism cho phép consumer gọi một contract chung mà không cần biết concrete subtype.
 
-## Mental model
+```java
+abstract class Movie {
+    private final String title;
+    protected Movie(String title) { this.title = title; }
+    public final String title() { return title; }
+    public abstract String plot();
+}
 
-Polymorphism thay conditional type checks bằng virtual method. Base contract nên là method mà mọi subtype thực sự support.
+final class Adventure extends Movie {
+    Adventure(String title) { super(title); }
+    @Override public String plot() { return "hero faces danger"; }
+}
+```
 
-## Ví dụ Java 17
+```java
+static void describe(Movie movie) {
+    System.out.println(movie.title() + ": " + movie.plot());
+}
+```
 
-~~~java
-`class Movie { String plot(){return "generic";} }\nclass Adventure extends Movie { @Override String plot(){return "adventure";} }`
-~~~
+`describe` không switch theo loại movie. Runtime dispatch chọn `Adventure.plot()`.
 
-## Lỗi thường gặp
+## Design signal
 
-- switch theo class.
-- Base method không meaningful.
-- Field không polymorphic như method.
+Nếu method chỉ cần `plot`, nhận `Movie`, không nhận `Adventure`. Parameter càng trừu tượng vừa đủ thì consumer càng ít coupling.
 
-## Bài tập ngắn
+## Pitfalls và bài tập
 
-Tạo movie factory và gọi plot qua Movie reference.
-
-## Interview prompt
-
-Field hiding có dynamic dispatch không?
-
-## Nguồn
-
-Transcript course lesson 110; ví dụ được chuẩn hóa theo Java 17 và diễn giải theo hướng OOP design.
-
+Tránh downcast ngay sau khi nhận base reference và tránh base class có method không liên quan tới mọi subtype. Thêm `Comedy`, `ScienceFiction`, rồi viết playlist renderer; chứng minh thêm subtype không cần sửa loop.
