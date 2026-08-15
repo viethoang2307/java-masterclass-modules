@@ -22,6 +22,15 @@ Các bài 029–031 và 476–491 là setup/track cũ hoặc duplicate. Chỉ m�
 
 ## Module checkpoint
 
+## Practice
+
+Bộ practice gồm 20 bài từ Medium đến Extreme, kết hợp code Java với evidence workflow cho JDK, JShell, CLI và IntelliJ.
+
+- [Practice README](practice/README.md)
+- [Starter code](practice/code)
+- [Solutions](practice/solutions)
+- [Solution verifier](practice/verify-solutions.ps1)
+
 - Tôi biết JDK nào đang chạy trong terminal và IDE.
 - Tôi biết khi nào dùng JShell và khi nào tạo project.
 - Tôi biết cách ghi một câu hỏi kỹ thuật có thể nhận được hỗ trợ.

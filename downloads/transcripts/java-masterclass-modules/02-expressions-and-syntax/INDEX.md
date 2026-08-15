@@ -30,3 +30,8 @@
 | 516 | Expressions/statements section intro | 516 - Introduction | Done |
 | 517 | Keywords and expressions | 517 - Keywords | Done |
 | 518 | Statements, whitespace, indentation | 518 - Statements | Done |
+
+## Practice
+
+- [Practice index](practice/README.md)
+- 20 bài, chia code starter và solutions.

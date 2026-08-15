@@ -74,6 +74,15 @@ Output đáng chú ý của FloatingPointDemo cho thấy 0.1 + 0.2 có thể kh�
 
 ## Module checkpoint
 
+## Practice
+
+Bộ practice gồm 20 bài từ Medium đến Extreme, phủ expressions, variables, primitive types, promotion, casting, floating point, char, boolean và String.
+
+- [Practice README](practice/README.md)
+- [Starter code](practice/code)
+- [Solutions](practice/solutions)
+- [Solution verifier](practice/verify-solutions.ps1)
+
 - Tôi giải thích được vì sao `byte + short` thường trở thành `int`.
 - Tôi dự đoán được kết quả của `5 / 2` và `5.0 / 2`.
 - Tôi biết khi nào cần suffix `L`, `f`, `d`.
