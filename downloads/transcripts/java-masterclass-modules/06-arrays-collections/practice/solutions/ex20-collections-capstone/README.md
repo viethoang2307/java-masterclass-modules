@@ -1,0 +1,3 @@
+# Lời giải 20 — Collections Capstone
+
+Engine dùng `HashMap` cho catalog/stock, `TreeMap` để aggregate request và tạo line order deterministic, `EnumMap` cho category counters và `HashSet` cho tag union. Constructor/register normalize và defensive-copy product. `placeOrder` có ba pha: aggregate + validate shape, validate toàn bộ stock và tính report, cuối cùng mới commit stock. Vì vậy failure trước commit không để lại partial state. Exact arithmetic phát hiện overflow. Complexity O(r log u + u), trong đó r là request và u là SKU khác nhau. Production concurrency cần transaction/locking; collection đơn lẻ không tự làm workflow atomic giữa nhiều key.
