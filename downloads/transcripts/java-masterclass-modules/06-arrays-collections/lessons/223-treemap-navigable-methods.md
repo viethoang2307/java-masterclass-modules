@@ -1,41 +1,26 @@
-# 223. `TreeMap` và range queries
+# 223. TreeMap và range query
 
-## Mục tiêu
+## Navigation
 
-- Dùng `firstEntry`, `lastEntry`, `floorEntry`, `ceilingEntry`.
-- Tạo range view theo key.
-
-```java
+~~~java
 NavigableMap<Integer, String> releases = new TreeMap<>();
 releases.put(8, "LTS-8");
 releases.put(11, "LTS-11");
 releases.put(17, "LTS-17");
 
-Map.Entry<Integer, String> supported = releases.floorEntry(15); // 11
-```
+Map.Entry<Integer, String> active = releases.floorEntry(15);
+~~~
 
-`pollFirstEntry` và `pollLastEntry` vừa trả vừa xóa. `subMap`, `headMap`, `tailMap` thường là backed views và nhận cờ inclusive.
+floorEntry lấy key lớn nhất <= target; higherEntry lấy key strict lớn hơn. first/last query không xóa; pollFirst/pollLast vừa trả vừa xóa.
 
-```java
-NavigableMap<Integer, String> range =
-        releases.subMap(8, true, 17, false);
-```
+## Range view
 
-## Lỗi thường gặp
+subMap/headMap/tailMap có endpoint inclusive/exclusive và thường là backed view. Copy nếu cần snapshot.
 
-- Không xử lý `null` khi floor/ceiling không tồn tại.
-- Nhầm method query với method `poll` phá dữ liệu.
-- Sửa range view trong lúc không biết nó tác động map gốc.
+## Bài tập
 
-## Bài tập ngắn
+Tìm configuration có hiệu lực gần nhất tại timestamp, test trước-first/after-last, inclusive boundary và map mutate sau snapshot.
 
-Tìm cấu hình có hiệu lực gần nhất tại một timestamp bằng `floorEntry`.
+## Pitfalls
 
-## Interview prompt
-
-Vì sao `TreeMap` phù hợp cho effective-dated configuration?
-
-## Nguồn
-
-- Transcript bài 223.
-- Java 17 API: `NavigableMap`, `TreeMap`.
+Nhầm floor với ceiling, dùng poll khi chỉ muốn query và không xử lý null entry.

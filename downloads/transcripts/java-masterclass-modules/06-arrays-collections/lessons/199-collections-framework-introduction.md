@@ -1,42 +1,29 @@
 # 199. Collections Framework: bức tranh tổng thể
 
-## Mục tiêu
+## Interface trước implementation
 
-- Phân biệt `Collection`, `Collections` và Java Collections Framework.
-- Chọn đúng cấu trúc dữ liệu dựa trên thứ tự, trùng lặp và cách tra cứu.
+Collection Framework tách contract khỏi implementation. List giữ thứ tự và cho duplicate; Set biểu diễn uniqueness; Queue mô hình hóa processing; Map lưu mapping key/value và không extends Collection.
 
-## Mental model
-
-`Collection<E>` là interface gốc cho nhóm phần tử. `List` giữ thứ tự và cho phép trùng, `Set` loại trùng, còn `Queue` mô hình hóa hàng đợi. `Map<K,V>` thuộc framework nhưng không kế thừa `Collection` vì nó lưu cặp khóa–giá trị. `Collections` là utility class chứa các thuật toán static.
-
-```java
-List<String> order = new ArrayList<>();
-Set<String> tags = new HashSet<>();
+~~~java
+List<String> playlist = new ArrayList<>();
+Set<String> usernames = new HashSet<>();
 Map<String, Integer> stock = new HashMap<>();
-```
+~~~
 
-## Chọn cấu trúc
+Khai báo theo interface giúp thay ArrayList bằng LinkedList hoặc HashSet bằng LinkedHashSet mà consumer ít đổi.
 
-- Cần truy cập theo index: `ArrayList`.
-- Cần phần tử duy nhất: `HashSet`.
-- Cần thứ tự sort tự nhiên: `TreeSet` hoặc `TreeMap`.
-- Cần lookup theo key: `HashMap`.
+## Chọn theo operation
 
-## Lỗi thường gặp
+Hỏi operation chính trước: index/random access, append/remove đầu, uniqueness, sorted/range, lookup key hay insertion order. Đừng chọn collection vì tên quen thuộc.
 
-- Dùng `List` rồi tự kiểm tra trùng thay vì biểu diễn invariant bằng `Set`.
-- Nhầm `Collection` interface với `Collections` utility class.
-- Chọn collection theo thói quen mà không xác định operation chính.
+## Contract cần đọc
 
-## Bài tập ngắn
+Ordering, duplicate, null support, mutation, fail-fast behavior và complexity khác nhau giữa implementation. List.of là immutable; HashMap không hứa iteration order; TreeSet dùng comparator để xác định order và uniqueness.
 
-Chọn cấu trúc phù hợp cho playlist, username duy nhất, bảng tồn kho và hàng chờ in; giải thích bằng hai tiêu chí.
+## Bài tập
 
-## Interview prompt
+Chọn cấu trúc cho playlist, username unique, print queue, inventory và leaderboard. Với mỗi lựa chọn, ghi invariant, operation chính, Big-O và output ordering.
 
-Vì sao `Map` không extends `Collection`?
+## Checkpoint
 
-## Nguồn
-
-- Transcript bài 199.
-- Java 17 API: `java.util.Collection`, `java.util.Collections`.
+Bạn phải giải thích vì sao Map không extends Collection và khi nào sorting ở presentation đủ thay cho TreeSet.

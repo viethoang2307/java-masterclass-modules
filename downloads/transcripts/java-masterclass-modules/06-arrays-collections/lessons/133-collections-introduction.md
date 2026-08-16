@@ -1,34 +1,29 @@
-# 133 — Collections introduction
+# 133. Collections Framework: từ array tới cấu trúc có contract
 
-## Mục tiêu
+## Bức tranh
 
-Hiểu Collection Framework cung cấp dynamic containers và algorithms.
-
-## Mental model
-
-Collection là interface hierarchy; arrays vẫn hữu ích cho fixed compact data. Chọn theo operations, không theo thói quen.
-
-## Ví dụ Java 17
+Collection Framework cung cấp interface và implementation cho nhóm phần tử. List giữ thứ tự và cho phép duplicate; Set biểu diễn uniqueness; Queue biểu diễn processing order; Map lưu key/value và không extends Collection.
 
 ~~~java
-java.util.Collection<String> names=new java.util.ArrayList<>();
-names.add("An");
+List<String> names = new ArrayList<>();
+Set<String> tags = new HashSet<>();
+Map<String, Integer> stock = new HashMap<>();
 ~~~
 
-## Lỗi thường gặp
+Khai báo theo interface giúp đổi implementation mà consumer ít đổi.
 
-- Nhầm Collection với Collections.
-- Dùng raw type.
-- Chọn LinkedList không đo operations.
+## Chọn cấu trúc
 
-## Bài tập ngắn
+Cần index và append thường xuyên: ArrayList. Cần uniqueness: HashSet. Cần sorted/range: TreeSet/TreeMap. Cần lookup theo key: HashMap. Cần insertion order: LinkedHashSet/LinkedHashMap.
 
-Lập decision table array/List/Set/Map.
+## Contract quan trọng
 
-## Interview prompt
+Không giả định mọi collection có order, mutation, null support hay complexity giống nhau. List.of là immutable; HashMap không đảm bảo iteration order.
 
-Collection và Map liên hệ thế nào?
+## Bài tập
 
-## Nguồn
+Chọn collection cho playlist, username unique, print queue và inventory. Với mỗi lựa chọn, ghi operation chính, ordering, duplicate và failure behavior.
 
-Transcript course lesson 133; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+## Checkpoint
+
+Collections API là contract trước, concrete class sau. Đừng chọn theo thói quen.

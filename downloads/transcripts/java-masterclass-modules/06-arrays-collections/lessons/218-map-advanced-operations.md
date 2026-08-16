@@ -1,41 +1,27 @@
 # 218. Map operations nâng cao
 
-## Mục tiêu
+## merge và compute
 
-- Dùng `putIfAbsent`, `compute`, `computeIfAbsent`, `merge`, `replace`.
-- Hiểu cách remapping function xử lý `null`.
-
-```java
+~~~java
 Map<String, Integer> counts = new HashMap<>();
 for (String word : List.of("java", "map", "java")) {
     counts.merge(word, 1, Integer::sum);
 }
-```
+~~~
 
-```java
+computeIfAbsent phù hợp map key tới collection:
+
+~~~java
 Map<String, List<String>> byTeam = new HashMap<>();
-byTeam.computeIfAbsent("backend", ignored -> new ArrayList<>())
-      .add("An");
-```
+byTeam.computeIfAbsent("backend", ignored -> new ArrayList<>()).add("An");
+~~~
 
-`compute` có thể xóa mapping nếu remapping function trả `null`. Function nên ngắn, không sửa chính map theo cách khó dự đoán.
+putIfAbsent chỉ thêm khi thiếu; compute tính lại từ state hiện tại; merge ghép old/new. Remapping function trả null có thể xóa mapping.
 
-## Chọn method
+## Bài tập
 
-- Chỉ thêm khi thiếu: `putIfAbsent`.
-- Khởi tạo collection con: `computeIfAbsent`.
-- Cộng dồn/ghép giá trị: `merge`.
-- Tính lại dựa trên trạng thái hiện tại: `compute`.
+Tạo histogram, inverted index và inventory merge. Test key vắng, value null, function trả null và overflow.
 
-## Bài tập ngắn
+## Pitfalls
 
-Tạo histogram ký tự và inverted index từ token đến tập document ID.
-
-## Interview prompt
-
-`merge` giúp tránh pattern `containsKey` + `get` + `put` như thế nào?
-
-## Nguồn
-
-- Transcript bài 218.
-- Java 17 API: `Map` default methods.
+Sửa chính map trong remapping function, chứa side effect khó đoán và dùng containsKey/get/put dài dòng khi merge phù hợp.

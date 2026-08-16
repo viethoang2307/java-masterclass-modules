@@ -1,34 +1,35 @@
-# 127 — Reference VS value types với arrays
+# 127. Array reference so với value semantics
 
-## Mục tiêu
+## Điều thực sự được truyền vào method
 
-Hiểu assignment/pass parameter của array là copy reference value.
-
-## Mental model
-
-Java luôn pass-by-value; với array, value được copy là reference, nên element mutation thấy ở caller.
-
-## Ví dụ Java 17
+Java truyền value của reference. Method nhận một bản copy reference nhưng vẫn trỏ tới cùng array object.
 
 ~~~java
-static void mutate(int[] a){a[0]=99;}
-static void reassign(int[] a){a=new int[]{1};}
+static void changeFirst(int[] values) {
+    values[0] = 99;
+}
+static void replace(int[] values) {
+    values = new int[]{7, 7};
+}
 ~~~
 
-## Lỗi thường gặp
+Sau changeFirst, caller thấy phần tử đổi; sau replace, caller vẫn giữ array cũ. Đây là khác biệt giữa mutate object và reassign local variable.
 
-- Nói Java pass-by-reference.
-- Reassign parameter mong caller đổi.
-- Clone tưởng deep.
+## Defensive copy
 
-## Bài tập ngắn
+~~~java
+static int[] safeCopy(int[] input) {
+    if (input == null) throw new IllegalArgumentException("input");
+    return Arrays.copyOf(input, input.length);
+}
+~~~
 
-Vẽ reference diagram mutate/reassign/copy.
+Dùng copy khi API muốn giữ ownership. Với nested array, copy outer array chưa đủ; cần deep copy từng row nếu row mutable.
 
-## Interview prompt
+## Bài tập
 
-Pass-by-value của reference nghĩa là gì?
+Viết class Matrix nhận int[][], test caller sửa outer array, row array và object có bị lộ hay không. Ghi rõ shallow/deep copy choice.
 
-## Nguồn
+## Pitfalls
 
-Transcript course lesson 127; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+Nhầm Java pass-by-reference, trả internal array từ getter, và chỉ copy outer dimension của 2D array.

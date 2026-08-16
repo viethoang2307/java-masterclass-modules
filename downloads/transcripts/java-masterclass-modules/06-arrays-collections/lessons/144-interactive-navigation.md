@@ -1,34 +1,23 @@
-# 144 — LinkedList challenge navigation
+# 144. Interactive navigation
 
-## Mục tiêu
+## Tách input khỏi model
 
-Thiết kế forward/backward menu không skip item.
-
-## Mental model
-
-Direction switch cần điều chỉnh iterator cursor; model state explicit giúp tránh double next/previous.
-
-## Ví dụ Java 17
+Console loop parse command; itinerary model xử lý transition; renderer in result. Tách ba layer giúp test navigation không cần Scanner.
 
 ~~~java
-boolean forward=true;
-// when switching direction, adjust cursor once
+enum Command { NEXT, PREVIOUS, CURRENT, QUIT, UNKNOWN }
 ~~~
+
+Parser nên trim/case-normalize và trả enum/result thay vì truyền raw string sâu vào domain.
+
+## Boundary behavior
+
+Document next ở cuối, previous ở đầu, current khi empty và quit có mutate state hay không. Có thể dùng Optional<String> cho current.
+
+## Bài tập
+
+Viết parser hỗ trợ N, P, C, Q và full words. Tạo fake input list, chạy loop deterministic và assert từng output/state.
 
 ## Lỗi thường gặp
 
-- Skip khi đổi hướng.
-- NoSuchElementException.
-- UI logic trộn collection mutation.
-
-## Bài tập ngắn
-
-Viết deterministic command runner F/B/Q.
-
-## Interview prompt
-
-Cursor ở đầu/cuối xử lý sao?
-
-## Nguồn
-
-Transcript course lesson 144; ví dụ chuẩn hóa Java 17, bổ sung contract, complexity và boundary cases.
+Scanner đọc sai newline, parser mutate list, và game loop truy cập field private của itinerary.

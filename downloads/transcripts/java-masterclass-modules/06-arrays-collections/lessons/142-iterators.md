@@ -1,34 +1,27 @@
-# 142 — Iterator và ListIterator
+# 142. Iterator và safe mutation
 
-## Mục tiêu
+## Vì sao iterator?
 
-Duyệt/remove an toàn qua iterator.
-
-## Mental model
-
-Iterator remove phần tử vừa next; structural mutation ngoài iterator gây fail-fast.
-
-## Ví dụ Java 17
+Iterator cung cấp traversal abstraction và operation remove hợp lệ trong lúc duyệt.
 
 ~~~java
-var it=list.iterator();
-while(it.hasNext())if(it.next().isBlank())it.remove();
+Iterator<String> iterator = values.iterator();
+while (iterator.hasNext()) {
+    String value = iterator.next();
+    if (value.isBlank()) iterator.remove();
+}
 ~~~
 
-## Lỗi thường gặp
+Xóa trực tiếp values.remove trong enhanced for thường gây ConcurrentModificationException. Fail-fast là best effort, không phải concurrency guarantee.
 
-- remove trước next.
-- list.remove trong loop.
-- Tin fail-fast là thread safety.
+## ListIterator
 
-## Bài tập ngắn
+ListIterator thêm previous, add, set và nextIndex; phù hợp ordered insertion/chỉnh list hai chiều.
 
-Filter in-place bằng iterator.
+## Bài tập
 
-## Interview prompt
+Implement removeInvalid, lọc null/blank/token sai bằng iterator. Test ArrayList và LinkedList, đếm số phần tử xóa và test repeated remove contract.
 
-Fail-fast guarantee tuyệt đối không?
+## Pitfalls
 
-## Nguồn
-
-Transcript course lesson 142; ví dụ chuẩn hóa Java 17, bổ sung contract, complexity và boundary cases.
+Gọi remove trước next, gọi remove hai lần, giữ iterator sau structural modification và nghĩ fail-fast thay thế synchronization.

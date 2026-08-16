@@ -1,33 +1,28 @@
-# 128 — Varargs
+# 128. Varargs: cú pháp tiện lợi nhưng vẫn là array
 
-## Mục tiêu
-
-Dùng T... như array parameter và tránh overload ambiguity.
-
-## Mental model
-
-Varargs compile thành array; chỉ một varargs và phải cuối parameter list.
-
-## Ví dụ Java 17
+## Runtime model
 
 ~~~java
-static int sum(int... values){int s=0;for(int v:values)s+=v;return s;}
+static int sum(int... values) {
+    int total = 0;
+    for (int value : values) total += value;
+    return total;
+}
+
+sum(1, 2, 3);
+sum(new int[]{1, 2, 3});
 ~~~
 
-## Lỗi thường gặp
+Varargs compile thành array. Method chỉ nhận một varargs parameter; nó phải là parameter cuối cùng. Caller có thể truyền zero arguments, nên empty case phải có contract.
 
-- Varargs không ở cuối.
-- Null call mơ hồ.
-- Overload varargs gây ambiguous.
+## Overload và null
 
-## Bài tập ngắn
+Overload với varargs dễ mơ hồ. Gọi sum((int[]) null) tạo null array, khác với sum() tạo array rỗng; quyết định có reject null không. Không dùng varargs cho API cần performance cực cao trong loop nóng nếu allocation đáng kể.
 
-Viết join(separator,String...).
+## Bài tập
 
-## Interview prompt
+Viết summarize(String separator, String... values), trim value, bỏ blank, trả count/text và test zero args, explicit array, null array.
 
-Varargs allocation cost?
+## Pitfalls
 
-## Nguồn
-
-Transcript course lesson 128; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+Quên varargs có thể null, đặt parameter sau varargs, và overload khiến compiler không chọn được method.

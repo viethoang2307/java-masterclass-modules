@@ -1,46 +1,26 @@
 # 226. Store inventory: catalog và stock
 
-## Mục tiêu
+## Tách metadata/state
 
-- Xây catalog lookup và stock mutation có validation.
-- Tách product metadata khỏi quantity mutable.
-
-```java
+~~~java
 record Product(String sku, String name, long unitPriceCents) {
     Product {
-        if (sku.isBlank() || name.isBlank() || unitPriceCents < 0) {
-            throw new IllegalArgumentException("Invalid product");
-        }
+        if (sku.isBlank() || name.isBlank() || unitPriceCents < 0)
+            throw new IllegalArgumentException("invalid product");
     }
 }
-```
+~~~
 
-```java
-final class StockLevel {
-    private int onHand;
-    private int reserved;
-    int available() { return onHand - reserved; }
-}
-```
+Catalog giữ product metadata; stock giữ onHand/reserved riêng. SKU normalized và immutable key.
 
-Catalog có thể immutable sau load; stock là state riêng. Không dùng `Product` mutable làm key. SKU normalized hoặc value object phù hợp hơn.
+## Operations
 
-## Operation quan trọng
+register reject duplicate; receive quantity dương và exact arithmetic; reserve kiểm tra available; release không vượt reserved. Validate toàn bộ trước mutate để tránh partial update.
 
-- `registerProduct`: reject duplicate SKU hoặc rule update explicit.
-- `receive`: quantity > 0, kiểm tra overflow.
-- `reserve`: product tồn tại và available đủ.
-- `release`: không vượt reserved.
+## Bài tập
 
-## Bài tập ngắn
+Implement reserveAll(Map<Sku,Integer>) atomic ở mức model. Test unknown SKU, insufficient stock, duplicate quantity và overflow.
 
-Triển khai `reserveAll(Map<Sku,Integer>)` theo kiểu validate-all-before-mutate để tránh partial update.
+## Pitfalls
 
-## Interview prompt
-
-Vì sao product metadata và stock quantity nên có lifecycle tách nhau?
-
-## Nguồn
-
-- Transcript bài 226.
-- Java 17 API: `Map`, records, integer exact arithmetic.
+Product mutable làm key, double cho tiền, và update một index nhưng quên index khác.

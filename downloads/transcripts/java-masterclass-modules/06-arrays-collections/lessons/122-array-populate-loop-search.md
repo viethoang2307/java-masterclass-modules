@@ -1,33 +1,33 @@
-# 122 — Populate, loop và search arrays
+# 122. Populate, loop và search trong array
 
-## Mục tiêu
-
-Duyệt array bằng indexed/enhanced for và linear search.
-
-## Mental model
-
-Indexed loop cần vị trí; enhanced for đọc value nhưng không thay trực tiếp element primitive.
-
-## Ví dụ Java 17
+## Populate bằng index
 
 ~~~java
-static int indexOf(int[] a,int target){for(int i=0;i<a.length;i++)if(a[i]==target)return i;return -1;}
+int[] values = new int[5];
+for (int i = 0; i < values.length; i++) {
+    values[i] = (i + 1) * 10;
+}
 ~~~
+
+Dùng index khi cần ghi hoặc biết vị trí; enhanced for phù hợp đọc toàn bộ value. Thay đổi biến primitive value không thay phần tử array; với object array, biến là reference copy nên mutation object có thể quan sát được.
+
+## Linear search
+
+~~~java
+static int indexOf(int[] values, int target) {
+    for (int i = 0; i < values.length; i++) {
+        if (values[i] == target) return i;
+    }
+    return -1;
+}
+~~~
+
+Contract -1 phải được document; caller không được dùng kết quả như index nếu chưa kiểm tra. Tìm occurrence đầu tiên khác với tìm occurrence cuối.
+
+## Complexity và test
+
+Linear search O(n), không yêu cầu array sort. Test target ở đầu/cuối, duplicate, không có và empty array. Nếu search nhiều lần trên dữ liệu ổn định, cân nhắc sort + binary search hoặc Set.
 
 ## Lỗi thường gặp
 
-- Enhanced for assignment không đổi array.
-- Không xử lý null.
-- Return 0 khi không tìm thấy.
-
-## Bài tập ngắn
-
-Implement count/find/replace với boundary tests.
-
-## Interview prompt
-
-Linear search complexity?
-
-## Nguồn
-
-Transcript course lesson 122; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+Return trong loop sai vị trí, dùng <=, và nhầm tìm kiếm tuyến tính với binary search khi input chưa sort.

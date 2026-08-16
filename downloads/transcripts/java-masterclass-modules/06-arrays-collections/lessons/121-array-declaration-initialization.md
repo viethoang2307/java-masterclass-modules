@@ -1,35 +1,33 @@
-# 121 — Declaring, initializing và accessing arrays
+# 121. Khai báo và khởi tạo array
 
-## Mục tiêu
-
-Phân biệt declaration, allocation và initializer.
-
-## Mental model
-
-new int[n] tạo n phần tử default 0; initializer xác định length từ literals.
-
-## Ví dụ Java 17
+## Ba dạng phổ biến
 
 ~~~java
-int[] values = new int[3];
-values[0] = 10;
-int[] more = {1,2,3};
+int[] first = new int[4];
+int[] second = {10, 20, 30};
+int[] third = new int[]{4, 5, 6};
 ~~~
 
-## Lỗi thường gặp
+Dạng initializer ngắn chỉ dùng ở declaration hoặc new int[]{...} khi assignment sau đó. int[] values; mới chỉ khai báo reference, chưa có array object.
 
-- NegativeArraySizeException.
-- Null array access.
-- Off-by-one.
+## Reference array
 
-## Bài tập ngắn
+~~~java
+String[] names = new String[2];
+names[0] = "An";
+names[1] = "Binh";
+~~~
 
-Viết safeGet(array,index,fallback).
+Mỗi slot ban đầu là null. Với Person[], cần new Person(...) cho từng slot trước khi gọi method; nếu không sẽ gặp NullPointerException.
 
-## Interview prompt
+## API boundary
 
-Default value của object array là gì?
+API nhận array cần quyết định null có hợp lệ không. Nếu không, fail sớm bằng IllegalArgumentException. Array rỗng là input hợp lệ hay không phải ghi rõ riêng, vì null và empty có semantics khác.
 
-## Nguồn
+## Bài tập
 
-Transcript course lesson 121; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+Tạo String[] có 5 slot, populate bằng loop, đếm null và viết method trả defensive copy. Test caller sửa copy không ảnh hưởng original.
+
+## Pitfalls
+
+Khai báo new int[0] rồi truy cập index, dùng array covariance sai (String[] là Object[] nhưng có thể ném ArrayStoreException), và quên array có immutable length.

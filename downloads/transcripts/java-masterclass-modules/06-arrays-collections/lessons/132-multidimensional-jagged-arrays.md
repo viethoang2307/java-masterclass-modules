@@ -1,34 +1,33 @@
-# 132 — Jagged và multi-dimensional arrays
+# 132. Multidimensional và jagged arrays
 
-## Mục tiêu
-
-Làm việc với rows khác length và deeper dimensions.
-
-## Mental model
-
-Mỗi dimension là object array độc lập; validate từng row trước access.
-
-## Ví dụ Java 17
+## Jagged model
 
 ~~~java
-int[][] jagged={{1},{2,3},null};
-for(int[] row:jagged)if(row!=null)System.out.println(row.length);
+int[][] jagged = new int[3][];
+jagged[0] = new int[]{1};
+jagged[1] = new int[]{2, 3, 4};
+jagged[2] = new int[0];
 ~~~
 
-## Lỗi thường gặp
+Mỗi row có length riêng. new int[3][] tạo outer array nhưng row vẫn null cho tới khi cấp phát.
 
-- Rectangular assumption.
-- Null nested array.
-- Complex indexing khó đọc.
+## Khi jagged hữu ích
 
-## Bài tập ngắn
+Jagged array phù hợp dữ liệu nhóm có kích thước khác nhau: lịch theo tháng, adjacency list đơn giản, scores theo người. Nếu domain cần matrix toán học, rectangular invariant rõ hơn.
 
-Tổng từng row của jagged matrix.
+## Traversal an toàn
 
-## Interview prompt
+~~~java
+for (int[] row : jagged) {
+    if (row == null) continue;
+    for (int value : row) System.out.println(value);
+}
+~~~
 
-deepEquals khác equals thế nào?
+## Bài tập
 
-## Nguồn
+Tính tổng từng row, tổng toàn bộ và row dài nhất. Chọn contract cho null row: reject, skip hoặc xem là empty; test phải phản ánh lựa chọn.
 
-Transcript course lesson 132; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+## Pitfalls
+
+Nhầm multidimensional array là contiguous memory, truy cập row null, và gọi deepToString khi muốn format từng row có rule riêng.

@@ -1,33 +1,28 @@
-# 130 — Reverse array in-place
+# 130. Reverse array in place
 
-## Mục tiêu
-
-Đảo array bằng two pointers và swap đúng một nửa.
-
-## Mental model
-
-Invariant: prefix/suffix ngoài [left,right] đã ở vị trí cuối.
-
-## Ví dụ Java 17
+## Two-pointer pattern
 
 ~~~java
-static void reverse(int[] a){for(int l=0,r=a.length-1;l<r;l++,r--){int t=a[l];a[l]=a[r];a[r]=t;}}
+static void reverse(int[] values) {
+    if (values == null) throw new IllegalArgumentException("values");
+    for (int left = 0, right = values.length - 1; left < right; left++, right--) {
+        int temp = values[left];
+        values[left] = values[right];
+        values[right] = temp;
+    }
+}
 ~~~
 
-## Lỗi thường gặp
+Mỗi vòng swap hai đầu rồi thu hẹp khoảng chưa xử lý. Array length chẵn và lẻ đều dừng đúng ở giữa.
 
-- Loop tới length làm đảo lại.
-- Mất value khi swap.
-- Không define null.
+## In-place versus copy
 
-## Bài tập ngắn
+In-place đạt O(1) extra space nhưng mutate caller. Nếu API không được mutate, tạo reverseCopy với O(n) space. Tên method nên nói rõ semantics: reverseInPlace và reversedCopy dễ đọc hơn reverse chung chung.
 
-Reverse odd/even/empty/single arrays.
+## Bài tập
 
-## Interview prompt
+Test empty, one element, even, odd, duplicate và alias reference. Viết cả hai phiên bản và chứng minh khác biệt ownership.
 
-In-place space complexity?
+## Pitfalls
 
-## Nguồn
-
-Transcript course lesson 130; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+Loop điều kiện sai làm swap lại, dùng temp không đúng, và mutate input dù README yêu cầu giữ nguyên.

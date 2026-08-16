@@ -1,34 +1,28 @@
-# 136 — ArrayList sort, copy và search
+# 136. ArrayList methods nâng cao và views
 
-## Mục tiêu
-
-Sort/search/copy List bằng List.copyOf, Collections.sort/binarySearch.
-
-## Mental model
-
-binarySearch cần sorted order tương thích comparator; copy strategy quyết định mutability.
-
-## Ví dụ Java 17
+## SubList là view
 
 ~~~java
-var xs=new java.util.ArrayList<>(java.util.List.of(3,1,2));
-xs.sort(Integer::compareTo);
+List<String> source = new ArrayList<>(List.of("A", "B", "C", "D"));
+List<String> middle = source.subList(1, 3);
+middle.clear();
+System.out.println(source); // [A, D]
 ~~~
 
-## Lỗi thường gặp
+subList không phải snapshot. Sửa view sửa backing list; sửa source structurally có thể làm view invalid và ném ConcurrentModificationException.
 
-- Search unsorted.
-- Shallow copy.
-- Comparator inconsistent.
+## Snapshot
 
-## Bài tập ngắn
+Dùng new ArrayList<>(source.subList(...)) hoặc List.copyOf để tách ownership. Chọn snapshot khi trả dữ liệu ra khỏi aggregate.
 
-Return sorted immutable copy.
+## Sorting
 
-## Interview prompt
+List.sort(comparator) mutate list. Comparator nên có tie-breaker để output deterministic và tránh dùng phép trừ có overflow.
 
-List.copyOf xử lý null thế nào?
+## Bài tập
 
-## Nguồn
+Viết paginate trả immutable page snapshot, reject page size <= 0, xử lý page vượt cuối và test source mutate sau khi trả page.
 
-Transcript course lesson 136; ví dụ chuẩn hóa Java 17, bổ sung contract, complexity và boundary cases.
+## Pitfalls
+
+Trả subList live từ public API, dùng index page không validate, và sort list immutable.

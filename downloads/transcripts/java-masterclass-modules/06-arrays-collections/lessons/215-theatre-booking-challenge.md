@@ -1,44 +1,30 @@
-# 215. Theatre booking challenge: thiết kế
+# 215. Theatre booking challenge: seat identity
 
-## Mục tiêu
+## Model
 
-- Mô hình hóa seat và ordering đa tiêu chí.
-- Bảo toàn invariant “mỗi seat chỉ được đặt một lần”.
+Seat identity là row + number; price không nên tham gia identity vì giá có thể đổi.
 
-```java
+~~~java
 record Seat(char row, int number, int priceCents) {}
+Comparator<Seat> byPosition =
+    Comparator.comparingInt(Seat::row)
+              .thenComparingInt(Seat::number);
+~~~
 
-Comparator<Seat> byPosition = Comparator
-        .comparingInt(Seat::row)
-        .thenComparingInt(Seat::number);
-```
+Có thể giữ TreeSet<Seat> availability hoặc Map<SeatKey,SeatState> nếu cần state reserved/cancelled. Comparator phải phân biệt mọi position.
 
-Không dùng price trong identity nếu seat vẫn là cùng vị trí khi giá đổi. Có thể dùng `Map<SeatKey,SeatState>` cho trạng thái và `TreeSet<SeatKey>` cho availability có thứ tự.
+## Booking flow
 
-## Luồng booking
-
-1. Parse và validate seat key.
+1. Parse và validate key.
 2. Lookup seat.
 3. Kiểm tra available.
-4. Chuyển state atomically trong phạm vi model đơn luồng.
-5. Trả result object rõ nguyên nhân thất bại.
+4. Chuyển state.
+5. Trả BookingResult rõ success/failure.
 
-## Edge cases
+## Invariants
 
-- Row không tồn tại, number ngoài range.
-- Đặt lại cùng seat.
-- Hủy seat chưa đặt.
-- Comparator trả `0` cho hai seat khác nhau.
+available và reserved disjoint; union bằng all seats; book thất bại không đổi state; seat không được book hai lần.
 
-## Bài tập ngắn
+## Bài tập
 
-Viết `BookingResult` bằng record/enum để không dùng chuỗi lỗi tự do.
-
-## Interview prompt
-
-Tại sao giá vé không nên là một phần của seat identity?
-
-## Nguồn
-
-- Transcript bài 215.
-- Java 17 API: `Comparator`, `TreeSet`, `Map`.
+Implement book/cancel với result enum. Test row/number invalid, duplicate booking, cancel chưa đặt và comparator không làm mất seat.

@@ -1,46 +1,28 @@
-# 216. Theatre booking: hoàn thiện và kiểm thử
+# 216. Theatre booking: query và consistency
 
-## Mục tiêu
+## Query theo price
 
-- Hoàn thiện query theo range và giá.
-- Viết invariant-based tests thay vì chỉ test output đẹp.
+Nếu cần lọc theo budget, có thể stream sort ở rìa:
 
-## Query an toàn
+~~~java
+List<Seat> result = available.stream()
+    .filter(seat -> seat.priceCents() <= budgetCents)
+    .sorted(Comparator.comparingInt(Seat::priceCents)
+        .thenComparingInt(Seat::row)
+        .thenComparingInt(Seat::number))
+    .toList();
+~~~
 
-```java
-List<Seat> affordable = available.stream()
-        .filter(seat -> seat.priceCents() <= budgetCents)
-        .sorted(Comparator.comparingInt(Seat::priceCents)
-                .thenComparingInt(Seat::row)
-                .thenComparingInt(Seat::number))
-        .toList();
-```
+Nếu query nhiều theo position và price, một collection không tự tối ưu cả hai; nhiều index tăng consistency risk.
 
-Nếu cần rất nhiều query theo position và price, một collection không tối ưu đồng thời cả hai index. Có thể duy trì nhiều index nhưng phải cập nhật nhất quán.
+## Invariant test
 
-## Invariant kiểm thử
+Test available ∩ reserved rỗng, union giữ nguyên, tổng seat không đổi, failure không mutate và report deterministic.
 
-- `available ∩ reserved = ∅`.
-- `available ∪ reserved = allSeats`.
-- Tổng số seat không đổi sau book/cancel hợp lệ.
-- Book thất bại không thay state.
-- Report có ordering deterministic.
+## Money
 
-## Lỗi thường gặp
+Dùng integer cents, không dùng double. Nếu có tax/rounding phức tạp, dùng BigDecimal với rounding policy explicit.
 
-- Chỉ remove khỏi một index.
-- Dùng `double` cho tiền.
-- Expose collection nội bộ để caller sửa trực tiếp.
+## Bài tập
 
-## Bài tập ngắn
-
-Thêm `cancel` và test round trip book→cancel phục hồi đúng state ban đầu.
-
-## Interview prompt
-
-Khi có nhiều index trên cùng dữ liệu, rủi ro consistency xuất hiện ở đâu?
-
-## Nguồn
-
-- Transcript bài 216.
-- Java 17 API: streams, immutable collection views.
+Thêm cancel và test book→cancel phục hồi state. Viết audit log immutable cho booking success/failure.

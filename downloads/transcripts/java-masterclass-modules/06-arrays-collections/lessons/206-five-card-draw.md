@@ -1,45 +1,25 @@
-# 206. Five-card draw: hoàn thiện game loop
+# 206. Five-card draw: tách game loop và evaluator
 
-## Mục tiêu
+## Draw immutable hand
 
-- Tách setup, deal, evaluate và presentation.
-- Giữ kết quả có thể test bằng dependency injection tối giản.
-
-## Thiết kế đề xuất
-
-```java
-static List<Card> drawFive(List<Card> shuffledDeck, int offset) {
-    if (offset < 0 || offset + 5 > shuffledDeck.size()) {
-        throw new IllegalArgumentException("Not enough cards");
-    }
-    return List.copyOf(shuffledDeck.subList(offset, offset + 5));
+~~~java
+static List<Card> drawFive(List<Card> deck, int offset) {
+    if (offset < 0 || offset + 5 > deck.size())
+        throw new IllegalArgumentException("not enough cards");
+    return List.copyOf(deck.subList(offset, offset + 5));
 }
-```
+~~~
 
-Không giấu `new Random()` trong logic cốt lõi. Nhận `Random` hoặc nhận deck đã shuffle để test lặp lại được.
+copyOf bảo vệ hand khỏi việc deck nền thay đổi. Randomness nên inject bằng Random hoặc nhận deck đã shuffle để test deterministic.
 
-## Evaluation tối thiểu
+## Evaluator
 
-- Đếm rank bằng `Map<Rank,Integer>`.
-- Đếm suit bằng `EnumMap<Suit,Integer>`.
-- Pair/two-pair/three-of-a-kind dựa trên frequency values.
-- Flush khi chỉ có một suit.
+Dùng Map<Rank,Integer> đếm rank và EnumMap<Suit,Integer> đếm suit. Pair, two pair, three-of-a-kind dựa frequency; flush khi một suit; thứ hạng phải có rule tie-breaker.
+
+## Bài tập
+
+Tạo enum HandCategory và evaluator đầy đủ. Test five unique ranks, pair, two pair, flush, invalid hand size và cùng seed cho cùng kết quả.
 
 ## Lỗi thường gặp
 
-- So sánh enum bằng string; enum nên dùng `==`.
-- Trộn logic output với luật game khiến test khó.
-- Trả `subList` view ra ngoài rồi thay đổi deck nền.
-
-## Bài tập ngắn
-
-Xây evaluator trả enum `HandCategory`, ưu tiên category mạnh hơn.
-
-## Interview prompt
-
-`List.copyOf(subList(...))` bảo vệ API khỏi những thay đổi nào?
-
-## Nguồn
-
-- Transcript bài 206.
-- Java 17 API: `List.copyOf`, `EnumMap`.
+Trộn output với luật game, so enum bằng String, trả subList view và tạo Random bên trong method khó test.

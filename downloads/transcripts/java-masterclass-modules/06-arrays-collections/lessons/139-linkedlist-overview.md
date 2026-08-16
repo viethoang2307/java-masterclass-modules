@@ -1,34 +1,26 @@
-# 139 — LinkedList overview và Big-O
-
-## Mục tiêu
-
-Hiểu node links, deque operations và trade-offs với ArrayList.
+# 139. LinkedList và trade-off
 
 ## Mental model
 
-LinkedList O(1) add/remove ends nhưng random access O(n), locality kém; chọn vì operations measured.
-
-## Ví dụ Java 17
+LinkedList là node liên kết hai chiều. get(index) cần traversal, còn add/remove ở đầu/cuối có thể hiệu quả. List interface không làm mọi implementation có cùng complexity.
 
 ~~~java
-java.util.Deque<String> q=new java.util.LinkedList<>();
-q.addLast("A");q.removeFirst();
+LinkedList<String> queue = new LinkedList<>();
+queue.addLast("A");
+queue.addLast("B");
+String first = queue.removeFirst();
 ~~~
 
-## Lỗi thường gặp
+Nếu cần queue semantics, khai báo Queue hoặc Deque thay vì expose LinkedList. ArrayDeque thường phù hợp queue/stack hơn LinkedList vì locality và overhead.
 
-- Chọn LinkedList vì tên.
-- get(i) trong loop O(n²).
-- Cho null khi API queue không mong.
+## Khi dùng
 
-## Bài tập ngắn
+LinkedList hữu ích khi thao tác đầu/cuối hoặc iterator position là trọng tâm. Random access nhiều lần thường chọn ArrayList.
 
-So sánh queue bằng ArrayDeque/LinkedList.
+## Bài tập
 
-## Interview prompt
+Implement itinerary insert bằng ListIterator, so sánh get(i) loop với iterator loop và ghi Big-O.
 
-Vì sao ArrayDeque thường tốt hơn LinkedList cho queue?
+## Pitfalls
 
-## Nguồn
-
-Transcript course lesson 139; ví dụ chuẩn hóa Java 17, bổ sung contract, complexity và boundary cases.
+Dùng LinkedList như array, lạm dụng remove(0) của ArrayList, và khai báo concrete type khiến đổi implementation khó.

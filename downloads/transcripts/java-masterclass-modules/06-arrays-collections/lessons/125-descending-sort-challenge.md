@@ -1,35 +1,35 @@
-# 125 — Descending sort challenge
+# 125. Descending sort challenge
 
-## Mục tiêu
+## Primitive array
 
-Sắp xếp giảm dần primitive array mà không dựa comparator primitive.
-
-## Mental model
-
-Có thể sort tăng rồi reverse in-place, hoặc box Integer[]; chọn theo memory/performance.
-
-## Ví dụ Java 17
+Arrays.sort(int[]) chỉ sort ascending. Để descending, có thể sort ascending rồi reverse in place.
 
 ~~~java
-int[] a={3,1,2};
-java.util.Arrays.sort(a);
-for(int l=0,r=a.length-1;l<r;l++,r--){int t=a[l];a[l]=a[r];a[r]=t;}
+Arrays.sort(values);
+for (int left = 0, right = values.length - 1; left < right; left++, right--) {
+    int temp = values[left];
+    values[left] = values[right];
+    values[right] = temp;
+}
 ~~~
 
-## Lỗi thường gặp
+## Object array và comparator
 
-- Comparator không áp dụng int[].
-- Reverse sai middle.
-- Mutate input không document.
+~~~java
+Integer[] values = {4, 1, 9};
+Arrays.sort(values, Comparator.reverseOrder());
+~~~
 
-## Bài tập ngắn
+Comparator phải total/consistent; không dùng phép trừ a - b nếu có thể overflow. Dùng Integer.compare(a, b).
 
-Implement descendingCopy không đổi original.
+## Contract
 
-## Interview prompt
+Challenge cần nói rõ mutate hay return copy, null handling, duplicate và ordering khi bằng nhau. “Sort descending” không đủ nếu caller cần stable tie-breaker.
 
-Primitive arrays sort dùng comparator được không?
+## Bài tập
 
-## Nguồn
+Viết descendingCopy(int[]) không sửa input. Thêm phiên bản object sort theo score giảm rồi name tăng.
 
-Transcript course lesson 125; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+## Pitfalls
+
+Dùng Collections.reverse cho primitive array, comparator subtraction overflow và quên kiểm tra null trong object array.

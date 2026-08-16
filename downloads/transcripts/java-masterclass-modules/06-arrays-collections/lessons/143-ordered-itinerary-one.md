@@ -1,34 +1,30 @@
-# 143 — LinkedList challenge Part 1
+# 143. Ordered itinerary phần 1
 
-## Mục tiêu
+## Ordering invariant
 
-Insert destination theo ordering không duplicate.
-
-## Mental model
-
-Giữ invariant list sorted; dùng ListIterator tìm insertion point một pass.
-
-## Ví dụ Java 17
+Một itinerary ordered cần quy tắc comparator rõ: destination alphabetic, stop number hoặc time. Nếu comparator trả 0 cho hai item khác nhau, TreeSet có thể loại mất item; với List, comparator chỉ quyết định vị trí.
 
 ~~~java
-var it=route.listIterator();
-while(it.hasNext()){String x=it.next();if(x.compareTo(newStop)>0){it.previous();it.add(newStop);break;}}
+List<String> route = new LinkedList<>();
+ListIterator<String> cursor = route.listIterator();
+while (cursor.hasNext()) {
+    if (cursor.next().compareToIgnoreCase(destination) > 0) {
+        cursor.previous();
+        cursor.add(destination);
+        return;
+    }
+}
+cursor.add(destination);
 ~~~
 
-## Lỗi thường gặp
+## Duplicate
 
-- Duplicate.
-- Iterator position sai.
-- Sort toàn list mỗi insert.
+Check duplicate theo cùng normalization với ordering. Nếu sort case-insensitive nhưng duplicate check case-sensitive, route có thể chứa hai representation của cùng điểm.
 
-## Bài tập ngắn
+## Bài tập
 
-Implement orderedInsert.
+Implement insertOrdered, removeByNormalizedName và snapshot. Test insert đầu/giữa/cuối, duplicate và input null.
 
-## Interview prompt
+## Pitfalls
 
-Insertion LinkedList vẫn O(n) vì sao?
-
-## Nguồn
-
-Transcript course lesson 143; ví dụ chuẩn hóa Java 17, bổ sung contract, complexity và boundary cases.
+Dùng index loop trên LinkedList, quên previous trước add, và comparator/order không nhất quán.

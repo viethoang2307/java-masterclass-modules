@@ -1,41 +1,25 @@
-# 214. `TreeSet` và các method điều hướng
+# 214. TreeSet và navigation
 
-## Mục tiêu
+## floor, ceiling, lower, higher
 
-- Dùng `lower`, `floor`, `ceiling`, `higher` chính xác.
-- Tạo range view bằng `headSet`, `tailSet`, `subSet`.
-
-```java
+~~~java
 NavigableSet<Integer> seats = new TreeSet<>(List.of(10, 20, 30, 40));
 int floor = seats.floor(25);      // 20
 int ceiling = seats.ceiling(25);  // 30
 Integer lower = seats.lower(20);  // 10
 Integer higher = seats.higher(20);// 30
-```
+~~~
 
-`floor`/`ceiling` có thể trả chính phần tử bằng target; `lower`/`higher` luôn strict. Method trả `null` nếu không có ứng viên.
+floor/ceiling cho phép bằng target; lower/higher strict. Method có thể trả null nếu không có ứng viên, nên tránh auto-unbox mù.
 
-```java
-NavigableSet<Integer> mid = seats.subSet(20, true, 40, false);
-```
+## Range views
 
-Range trả về thường là view liên kết với set gốc. Sửa view có thể sửa backing set; thêm phần tử ngoài range sẽ lỗi.
+subSet/headSet/tailSet thường là backed view; sửa view có thể sửa set gốc. Dùng copy nếu trả ra ngoài API.
 
-## Lỗi thường gặp
+## Bài tập
 
-- Auto-unbox `null` từ navigation method gây `NullPointerException`.
-- Nhầm inclusive/exclusive endpoints.
-- Trả mutable view ra ngoài API.
+Tìm seat gần nhất không vượt quá budget hoặc seat đầu tiên từ vị trí requested. Test boundary, empty set, inclusive/exclusive range và null result.
 
-## Bài tập ngắn
+## Pitfalls
 
-Tìm ghế gần nhất không vượt quá khoảng cách cho phép, có xử lý trường hợp không còn ghế.
-
-## Interview prompt
-
-Khác biệt semantic giữa `floor` và `lower` là gì?
-
-## Nguồn
-
-- Transcript bài 214.
-- Java 17 API: `NavigableSet`, `TreeSet`.
+Nhầm floor với lower, endpoint sai, và trả mutable range view.

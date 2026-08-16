@@ -1,33 +1,24 @@
-# 148 — Banking challenge Part 2
+# 148. Banking challenge: encapsulate account state
 
-## Mục tiêu
+## Aggregate boundary
 
-Hoàn thiện Bank lookup/add transaction và immutable views.
-
-## Mental model
-
-Map thường phù hợp lookup customer hơn linear List; nếu lesson dùng List, document O(n).
-
-## Ví dụ Java 17
+Account nên sở hữu ledger và expose command, không cho caller add transaction tùy ý.
 
 ~~~java
-java.util.Map<String,Customer> customers=new java.util.HashMap<>();
+final class Account {
+    private final List<Long> ledger = new ArrayList<>();
+    void deposit(long cents) { requirePositive(cents); ledger.add(cents); }
+    void withdraw(long cents) { requirePositive(cents); ledger.add(-cents); }
+    List<Long> transactions() { return List.copyOf(ledger); }
+}
 ~~~
+
+Nếu withdraw không được vượt balance, validate trước khi append. Failure phải giữ ledger unchanged.
+
+## Bài tập
+
+Thêm transfer giữa hai account với validate-all-before-mutate, exact arithmetic và result rõ. Test source/destination khi failure.
 
 ## Lỗi thường gặp
 
-- Case normalization khác nhau.
-- Unknown customer.
-- Return internal collection.
-
-## Bài tập ngắn
-
-Implement bank report sorted customer.
-
-## Interview prompt
-
-Map lookup average complexity?
-
-## Nguồn
-
-Transcript course lesson 148; ví dụ chuẩn hóa Java 17, bổ sung contract, complexity và boundary cases.
+Trả ledger nội bộ, append debit trước rồi mới kiểm tra đủ tiền, và nhầm snapshot với live view.

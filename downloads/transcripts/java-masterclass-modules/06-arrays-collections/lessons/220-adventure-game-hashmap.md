@@ -1,45 +1,25 @@
-# 220. Adventure game với `HashMap`
+# 220. Adventure game với HashMap
 
-## Mục tiêu
+## Graph model
 
-- Mô hình hóa location graph bằng map.
-- Tách parse command khỏi navigation rules.
+Location là node, exits là directed edge command → destination ID. World là Map<Integer, Location> để lookup nhanh.
 
-```java
+~~~java
 record Location(int id, String description, Map<String, Integer> exits) {
-    Location {
-        exits = Map.copyOf(exits);
-    }
+    Location { exits = Map.copyOf(exits); }
 }
+~~~
 
-Map<Integer, Location> world = new HashMap<>();
-```
-
-Mỗi location là node; exits là directed edges từ command (`N`, `S`, `E`, `W`) tới destination ID. `world` cung cấp lookup O(1) average theo ID.
+Map.copyOf bảo vệ exits khỏi mutation caller. Validator phải phát hiện dangling destination ID.
 
 ## Navigation
 
-1. Normalize input bằng `strip().toUpperCase(Locale.ROOT)`.
-2. Resolve alias command.
-3. Tìm destination trong exits của location hiện tại.
-4. Xác minh destination tồn tại trong world.
-5. Chỉ cập nhật current location khi hợp lệ.
+Normalize command, resolve alias, lookup exit, xác minh destination, rồi mới cập nhật current location. Parse không nên nằm trong domain transition.
 
-## Lỗi thường gặp
+## Bài tập
 
-- Mutable exits bị caller sửa.
-- Dangling destination ID.
-- Trộn `Scanner` loop với domain logic, khó test.
+Implement validator world graph, command N/S/E/W/Q và shortest path bằng Queue + Set visited. Test unknown location, missing exit và dangling edge.
 
-## Bài tập ngắn
+## Pitfalls
 
-Viết validator phát hiện exit trỏ đến location không tồn tại.
-
-## Interview prompt
-
-Vì sao graph representation bằng `Map<ID, Location>` phù hợp với game này?
-
-## Nguồn
-
-- Transcript bài 220.
-- Java 17 API: `HashMap`, `Map.copyOf`.
+Mutable exits, update current trước khi validate destination và trộn Scanner với game model.

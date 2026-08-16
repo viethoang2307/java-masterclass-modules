@@ -1,43 +1,29 @@
-# 200. Các interface cốt lõi của Collections
+# 200. Core interfaces của Collections
 
-## Mục tiêu
+## Hierarchy
 
-- Đọc hierarchy `Iterable → Collection → List/Set/Queue`.
-- Lập trình theo interface thay vì concrete implementation.
+Iterable cung cấp iterator; Collection cung cấp add/remove/contains/size; List, Set và Queue chuyên biệt hóa semantics. Map là nhánh riêng với keySet, values và entrySet.
 
-## Hợp đồng chung
+~~~java
+static long positiveSum(Collection<Integer> values) {
+    long total = 0;
+    for (Integer value : values) {
+        if (value != null && value > 0) total += value;
+    }
+    return total;
+}
+~~~
 
-`Collection<E>` cung cấp `add`, `remove`, `contains`, `size`, `isEmpty`, `clear`, bulk operations và iteration. Một implementation có thể không hỗ trợ mutation và ném `UnsupportedOperationException`.
+Method nhận Collection không nên giả định có index hoặc insertion order. Nếu cần index, nhận List; nếu cần key, nhận Map.
 
-```java
-Collection<String> names = new ArrayList<>();
-names.addAll(List.of("An", "Bình", "Chi"));
-names.removeIf(name -> name.length() < 3);
-```
+## Mutability contract
 
-Khai báo theo interface giúp thay implementation mà ít ảnh hưởng code gọi:
+Một collection có thể read-only hoặc immutable; operation sửa có thể ném UnsupportedOperationException. Interface không đảm bảo method mutation luôn được hỗ trợ.
 
-```java
-List<Integer> scores = new ArrayList<>();
-// Có thể đổi thành LinkedList nếu workload thay đổi.
-```
+## Generic boundary
 
-## Điểm cần nhớ
+Collection<Integer> không phải Collection<Number> dù Integer extends Number. Dùng wildcard khi API cần variance, nhưng hiểu PECS trước khi áp dụng.
 
-- Generic bảo vệ type ở compile time.
-- `contains` và `remove(Object)` dựa vào `equals`.
-- Không giả định mọi collection đều có index hoặc giữ insertion order.
-- `List.of` tạo list không sửa được và không nhận `null`.
+## Bài tập
 
-## Bài tập ngắn
-
-Viết method nhận `Collection<Integer>` và trả tổng phần tử dương mà không phụ thuộc implementation.
-
-## Interview prompt
-
-Lợi ích và giới hạn của “program to an interface” là gì?
-
-## Nguồn
-
-- Transcript bài 200.
-- Java 17 API: `Iterable`, `Collection`, `List`, `Set`, `Queue`.
+Viết method nhận Collection<Integer> và method nhận List<Integer>; liệt kê operation mỗi method được phép dùng. Test bằng ArrayList, LinkedList và Set.

@@ -1,14 +1,11 @@
-# 221. Adventure game: hoàn thiện parser và loop
+# 221. Adventure game: parser, transition và BFS
 
-## Mục tiêu
+## Parser boundary
 
-- Xử lý command dài, alias và quit.
-- Giữ game loop nhỏ, deterministic và test được.
-
-```java
+~~~java
 static String direction(String raw) {
-    String normalized = raw.strip().toUpperCase(Locale.ROOT);
-    return switch (normalized) {
+    String command = raw.strip().toUpperCase(Locale.ROOT);
+    return switch (command) {
         case "N", "NORTH" -> "N";
         case "S", "SOUTH" -> "S";
         case "E", "EAST" -> "E";
@@ -17,32 +14,18 @@ static String direction(String raw) {
         default -> "?";
     };
 }
-```
+~~~
 
-Domain method nên nhận `currentId` và command rồi trả transition result; I/O layer chỉ đọc/in.
+Domain transition nhận normalized command và trả result; I/O layer chỉ đọc/in.
+
+## Shortest path
+
+BFS dùng Queue<Integer> và Set<Integer> visited, lưu predecessor để reconstruct path. Graph có cycle nên visited là bắt buộc.
 
 ## Test matrix
 
-- Command viết thường, có whitespace.
-- Alias đầy đủ và ký tự ngắn.
-- Direction hợp lệ nhưng không có exit.
-- Destination không tồn tại.
-- Quit không làm thay state.
-- Command không nhận diện.
+Test lowercase/whitespace, alias, valid direction không có exit, destination lỗi, quit không đổi state và unknown command.
 
-## Mở rộng
+## Bài tập
 
-Có thể dùng BFS với `Queue<Integer>` và `Set<Integer>` để tìm đường ngắn nhất giữa hai location.
-
-## Bài tập ngắn
-
-Thêm `shortestPath(world, start, goal)` và trả immutable list ID.
-
-## Interview prompt
-
-Tại sao parser và state transition nên là hai concern riêng?
-
-## Nguồn
-
-- Transcript bài 221.
-- Java 17 API: switch expressions, `Queue`, `Set`.
+Implement shortestPath immutable list ID và test start=goal, unreachable, cycle và missing node.

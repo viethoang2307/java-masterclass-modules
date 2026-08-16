@@ -1,34 +1,23 @@
-# 137 — Arrays VS ArrayLists
+# 137. Arrays so với ArrayList
 
-## Mục tiêu
+## So sánh contract
 
-Chọn container theo fixed size, primitive storage, API và mutation.
-
-## Mental model
-
-Array hỗ trợ primitive trực tiếp; ArrayList dùng wrappers, resize và rich API.
-
-## Ví dụ Java 17
+Array có length cố định, primitive support, overhead thấp và index nhanh. ArrayList là List mutable có size động, generic type, rich methods và boxing khi chứa primitive wrapper.
 
 ~~~java
-int[] raw={1,2};
-java.util.List<Integer> boxed=java.util.List.of(1,2);
+int[] primitive = new int[10];
+List<Integer> boxed = new ArrayList<>();
+boxed.add(10); // boxing int -> Integer
 ~~~
 
-## Lỗi thường gặp
+## Chọn theo operation
 
-- Boxing cost bỏ qua.
-- ArrayList capacity = size.
-- Chuyển bằng Arrays.asList primitive sai.
+Dữ liệu fixed-size và tight loop: array. Cần add/remove, API collection, generic method hoặc size thay đổi: ArrayList. Cần uniqueness/order khác: chọn Set/Queue thay vì ép ArrayList.
 
-## Bài tập ngắn
+## Bài tập
 
-Benchmark conceptual operations và lập decision table.
+Viết cùng một report bằng array và ArrayList, ghi khác biệt mutation, null, duplicate, resize và memory semantics. Đừng kết luận performance chỉ bằng một benchmark nhỏ.
 
-## Interview prompt
+## Pitfalls
 
-Arrays.asList khác List.of?
-
-## Nguồn
-
-Transcript course lesson 137; ví dụ chuẩn hóa Java 17, bổ sung contract, complexity và boundary cases.
+Dùng ArrayList chỉ vì quen tay, quên boxing, hoặc convert qua lại nhiều lần không cần thiết.

@@ -1,34 +1,31 @@
-# 145 — Autoboxing và unboxing
+# 145. Autoboxing và unboxing
 
-## Mục tiêu
-
-Hiểu primitive-wrapper conversion và null unboxing.
-
-## Mental model
-
-Collections generics không nhận primitive; compiler box/unbox, nhưng null Integer -> int gây NPE.
-
-## Ví dụ Java 17
+## Chuyển đổi
 
 ~~~java
-Integer boxed=42;
-int value=boxed;
+Integer boxed = 42; // boxing
+int primitive = boxed; // unboxing
 ~~~
 
-## Lỗi thường gặp
+Collections generic nhận reference type nên List<Integer> cần boxing. Unboxing null ném NullPointerException.
 
-- Unbox null.
-- == wrapper ngoài cache.
-- Boxing trong hot loop.
+~~~java
+Integer missing = null;
+// int value = missing; // lỗi runtime khi unbox
+~~~
 
-## Bài tập ngắn
+## Equality và cache
 
-Audit List<Integer> có null và safe sum.
+Không dùng == để so Integer vì wrapper caching khiến kết quả phụ thuộc giá trị/implementation. Dùng equals hoặc Objects.equals.
 
-## Interview prompt
+## Performance
 
-Integer cache ảnh hưởng == thế nào?
+Boxing tạo object/GC overhead trong loop lớn. Khi cần numeric hot path, primitive array hoặc specialized structure có thể phù hợp hơn.
 
-## Nguồn
+## Bài tập
 
-Transcript course lesson 145; ví dụ chuẩn hóa Java 17, bổ sung contract, complexity và boundary cases.
+Viết sum(List<Integer>) null policy rõ, test null element, empty list, Integer lớn và overflow. So sánh với sum(int[]).
+
+## Pitfalls
+
+Unbox null, so wrapper bằng ==, và quên overflow khi đổi primitive.

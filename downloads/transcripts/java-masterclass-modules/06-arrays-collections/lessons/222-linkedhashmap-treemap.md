@@ -1,38 +1,20 @@
-# 222. `LinkedHashMap` và `TreeMap`
+# 222. LinkedHashMap và TreeMap
 
-## Mục tiêu
+## Ordering choices
 
-- Chọn map theo ordering và workload.
-- Hiểu insertion order, access order và sorted key order.
+HashMap không bảo đảm order; LinkedHashMap giữ insertion order hoặc access order; TreeMap sort theo key với O(log n).
 
-| Loại | Ordering | Lookup phổ biến |
-|---|---|---|
-| `HashMap` | Không bảo đảm | O(1) average |
-| `LinkedHashMap` | Insertion hoặc access order | O(1) average |
-| `TreeMap` | Key order | O(log n) |
-
-```java
+~~~java
 Map<String, Integer> stable = new LinkedHashMap<>();
 NavigableMap<Integer, String> timeline = new TreeMap<>();
-```
+~~~
 
-`LinkedHashMap` có constructor access-order, hữu ích làm nền cho LRU cache nhỏ. `TreeMap` dùng natural ordering hoặc comparator; comparator trả `0` khiến key được xem là cùng key.
+LinkedHashMap access-order có thể làm nền cho LRU cache nhỏ. TreeMap comparator trả 0 khiến key được xem là cùng key.
 
-## Lỗi thường gặp
+## Bài tập
 
-- Dựa vào order của `HashMap`.
-- Comparator không nhất quán với equality.
-- Chọn `TreeMap` dù không dùng sorted/range operations.
+Implement cache tối đa ba phần tử, test eviction theo access order. Tạo TreeMap effective configuration và test range query.
 
-## Bài tập ngắn
+## Pitfalls
 
-Thiết kế cache tối đa ba phần tử bằng subclass `LinkedHashMap` và access order.
-
-## Interview prompt
-
-Khi nào `LinkedHashMap` đáng giá hơn `HashMap`?
-
-## Nguồn
-
-- Transcript bài 222.
-- Java 17 API: `LinkedHashMap`, `TreeMap`.
+Dựa vào HashMap order, comparator không phân biệt key, chọn TreeMap dù không cần sorted/range.

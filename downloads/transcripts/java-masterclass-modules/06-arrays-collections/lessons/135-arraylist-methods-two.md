@@ -1,34 +1,28 @@
-# 135 — ArrayList methods Part 2
+# 135. ArrayList methods: add, remove, set và contains
 
-## Mục tiêu
-
-Dùng add/remove/set/get và hiểu overloaded remove.
-
-## Mental model
-
-remove(int) xóa index; remove(Object) xóa value đầu tiên. Với Integer cần cast/boxing rõ.
-
-## Ví dụ Java 17
+## Value versus index overload
 
 ~~~java
-var xs=new java.util.ArrayList<>(java.util.List.of(1,2,3));
-xs.remove(Integer.valueOf(2));
+List<Integer> values = new ArrayList<>(List.of(10, 20, 30));
+values.remove(Integer.valueOf(20)); // remove value 20
+values.remove(0);                  // remove index 0
 ~~~
 
-## Lỗi thường gặp
+Với List<Integer>, remove(0) là remove index, không phải remove value zero. Dùng Integer.valueOf khi muốn object overload.
 
-- remove(1) xóa index.
-- Modify immutable source.
-- Iteration rồi remove trực tiếp.
+## Bulk methods
 
-## Bài tập ngắn
+addAll nối collection, containsAll kiểm tra subset, removeIf xóa theo predicate và replaceAll mutate từng phần tử. Mỗi method có mutation contract cần đọc trước khi dùng.
 
-Implement removeAllOccurrences.
+~~~java
+values.addAll(List.of(40, 50));
+values.removeIf(value -> value < 30);
+~~~
 
-## Interview prompt
+## Complexity và bài tập
 
-remove by value complexity?
+contains/indexOf O(n); remove giữa O(n). Viết method normalize list, deduplicate theo first occurrence và trả immutable copy. Test null, duplicate, remove index/value và input không bị mutate.
 
-## Nguồn
+## Pitfalls
 
-Transcript course lesson 135; ví dụ chuẩn hóa Java 17, bổ sung contract, complexity và boundary cases.
+Dùng remove(int) khi muốn remove value, remove trong enhanced for, và sửa List.of.

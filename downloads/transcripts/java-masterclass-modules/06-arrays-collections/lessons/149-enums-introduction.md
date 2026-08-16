@@ -1,34 +1,24 @@
-# 149 — Enums introduction
+# 149. Enum như domain type
 
-## Mục tiêu
+## Vì sao enum?
 
-Dùng enum cho closed set constants thay magic strings.
-
-## Mental model
-
-Enum là class instance hữu hạn, type-safe, có fields/methods và switch support.
-
-## Ví dụ Java 17
+Enum giới hạn tập giá trị hợp lệ và type-safe hơn String/int tự do.
 
 ~~~java
-enum Status{NEW,ACTIVE,CLOSED}
-Status s=Status.NEW;
+enum Status { NEW, ACTIVE, SUSPENDED, CLOSED }
+Status status = Status.NEW;
 ~~~
 
-## Lỗi thường gặp
+Enum có identity ổn định trong một type, dùng == để so sánh. values() trả array declaration order; valueOf() yêu cầu exact name và có thể ném IllegalArgumentException.
 
-- Compare name strings.
-- ordinal persistence.
-- valueOf untrusted input không catch.
+## Dữ liệu trong enum
 
-## Bài tập ngắn
+Enum có thể chứa fields/methods/constructor private. Nếu business rank có ý nghĩa, lưu explicit rank thay vì dùng ordinal làm database value.
 
-Parse status case-insensitive an toàn.
+## Bài tập
 
-## Interview prompt
+Tạo Priority có weight và label; parse input case-insensitive bằng method riêng; test unknown input và output declaration order.
 
-Vì sao không persist ordinal?
+## Pitfalls
 
-## Nguồn
-
-Transcript course lesson 149; ví dụ chuẩn hóa Java 17, bổ sung contract, complexity và boundary cases.
+Lưu ordinal lâu dài, so enum bằng String, và để valueOf raw input từ user.

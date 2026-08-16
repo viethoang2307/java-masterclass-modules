@@ -1,34 +1,26 @@
-# 140 — LinkedList add/remove
+# 140. LinkedList add/remove và cursor
 
-## Mục tiêu
-
-Dùng List/Deque APIs và hiểu head/tail.
-
-## Mental model
-
-LinkedList implement List và Deque; interface khai báo thể hiện intent.
-
-## Ví dụ Java 17
+## Các operation
 
 ~~~java
-java.util.Deque<Integer> d=new java.util.LinkedList<>();
-d.addFirst(1);d.addLast(2);
+LinkedList<String> route = new LinkedList<>();
+route.addFirst("Home");
+route.addLast("Office");
+route.add(1, "Cafe");
+route.removeFirst();
+route.removeLast();
 ~~~
 
-## Lỗi thường gặp
+Index insertion cần traversal; addFirst/addLast thể hiện intent và có complexity tốt hơn. remove(Object) dùng equals, remove(index) dùng vị trí.
 
-- Mix stack/queue semantics.
-- remove trên empty.
-- Index operations quá nhiều.
+## Iterator position
 
-## Bài tập ngắn
+ListIterator có next, previous, add, set, remove. Sau next hoặc previous mới được set/remove theo rule iterator; add thay đổi cursor.
 
-Implement bounded recent-history deque.
+## Bài tập
 
-## Interview prompt
+Viết orderedInsert với ListIterator, reject duplicate case-insensitive, test insert đầu/giữa/cuối và duplicate.
 
-peek và remove khác nhau?
+## Pitfalls
 
-## Nguồn
-
-Transcript course lesson 140; ví dụ chuẩn hóa Java 17, bổ sung contract, complexity và boundary cases.
+Gọi remove hai lần không có next, sửa list ngoài iterator, và nhầm remove value với remove index.

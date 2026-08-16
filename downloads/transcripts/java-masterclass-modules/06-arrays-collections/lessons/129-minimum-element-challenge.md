@@ -1,33 +1,28 @@
-# 129 — Minimum element challenge
+# 129. Tìm minimum không làm hỏng contract
 
-## Mục tiêu
-
-Tìm min với invariant và xử lý empty input.
-
-## Mental model
-
-Khởi tạo min bằng phần tử đầu; reject empty thay vì sentinel 0.
-
-## Ví dụ Java 17
+## One-pass algorithm
 
 ~~~java
-static int min(int[] a){if(a==null||a.length==0)throw new IllegalArgumentException();int m=a[0];for(int i=1;i<a.length;i++)m=Math.min(m,a[i]);return m;}
+static int min(int[] values) {
+    if (values == null || values.length == 0)
+        throw new IllegalArgumentException("non-empty values");
+    int minimum = values[0];
+    for (int i = 1; i < values.length; i++)
+        minimum = Math.min(minimum, values[i]);
+    return minimum;
+}
 ~~~
+
+Khởi tạo minimum bằng 0 là bug với array toàn dương hoặc toàn âm. Bắt đầu từ phần tử đầu bảo đảm min thuộc input.
+
+## Complexity và alternative
+
+Một traversal O(n), O(1) extra space. Không cần sort vì sort O(n log n) và mutate/copy không cần thiết. Với empty array có thể trả OptionalInt nếu API muốn biểu diễn absence thay vì exception.
+
+## Bài tập
+
+Viết min/max cùng một traversal trả record Stats. Test min ở đầu/cuối, duplicate, negative, overflow sum và null/empty.
 
 ## Lỗi thường gặp
 
-- Min=0 bias.
-- Empty array.
-- Sort chỉ để lấy min.
-
-## Bài tập ngắn
-
-Test all-positive/all-negative/single.
-
-## Interview prompt
-
-One-pass min complexity?
-
-## Nguồn
-
-Transcript course lesson 129; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+Sort chỉ để lấy phần tử đầu, khởi tạo sentinel sai, và quên document empty contract.

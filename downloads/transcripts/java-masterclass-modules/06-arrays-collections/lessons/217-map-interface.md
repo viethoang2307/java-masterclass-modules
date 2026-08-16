@@ -1,40 +1,28 @@
-# 217. `Map` interface
+# 217. Map interface
 
-## Mục tiêu
+## Key/value contract
 
-- Dùng `put`, `get`, `containsKey`, `remove` và `getOrDefault`.
-- Phân biệt key uniqueness với value duplication.
-
-```java
+~~~java
 Map<String, Integer> stock = new HashMap<>();
 Integer previous = stock.put("JAVA-17", 10);
 int quantity = stock.getOrDefault("JAVA-21", 0);
 boolean known = stock.containsKey("JAVA-17");
-```
+~~~
 
-`put` thay value nếu key đã tồn tại và trả value cũ. `get` trả `null` có thể mang hai nghĩa: key vắng hoặc key map tới null; dùng `containsKey` để phân biệt. Domain code thường tránh null value.
+put thay value nếu key đã tồn tại và trả value cũ. get trả null có thể nghĩa key vắng hoặc value null; containsKey phân biệt hai trường hợp.
 
 ## Views
 
-- `keySet()`: tập key.
-- `values()`: collection value, có thể trùng.
-- `entrySet()`: cặp key/value, hiệu quả khi cần cả hai.
+keySet là tập key, values là collection có thể duplicate, entrySet là cặp key/value. Khi cần cả key và value, duyệt entrySet tránh lookup lại.
 
-## Lỗi thường gặp
+## Key design
 
-- Dùng `get(...) == null` làm kiểm tra duy nhất khi null value được phép.
-- Lặp key rồi lookup lại thay vì lặp `entrySet`.
-- Dùng mutable key.
+Key nên immutable, equality/hashCode ổn định và normalized ở boundary. Map không guarantee ordering trừ implementation cụ thể.
 
-## Bài tập ngắn
+## Bài tập
 
-Xây phone book với normalized phone/name và xử lý duplicate key rõ ràng.
+Xây phone book normalize key, xử lý duplicate explicit, test null policy và snapshot keys.
 
-## Interview prompt
+## Pitfalls
 
-Tại sao `Map` không thể có hai entry với cùng key?
-
-## Nguồn
-
-- Transcript bài 217.
-- Java 17 API: `Map`, `HashMap`.
+Dùng get null làm kiểm tra duy nhất, mutable key, và dựa vào order HashMap.

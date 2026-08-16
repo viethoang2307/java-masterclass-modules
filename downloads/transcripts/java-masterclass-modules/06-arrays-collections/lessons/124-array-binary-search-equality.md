@@ -1,34 +1,28 @@
-# 124 — Binary search và array equality
+# 124. Binary search và equality
 
-## Mục tiêu
+## Precondition
 
-Dùng binarySearch trên sorted array và Arrays.equals/deepEquals đúng loại.
-
-## Mental model
-
-Binary search yêu cầu cùng ordering như sort; result âm encode insertion point.
-
-## Ví dụ Java 17
+Binary search chỉ đúng khi array đã sort theo cùng ordering.
 
 ~~~java
-int[] a={1,3,5};
-int i=java.util.Arrays.binarySearch(a,3);
+int[] sorted = {1, 3, 5, 7};
+int index = Arrays.binarySearch(sorted, 5); // 2
 ~~~
+
+Nếu target không có, kết quả âm mã hóa insertion point: -(insertionPoint) - 1. Có thể phục hồi bằng -result - 1.
+
+## Equality của object
+
+Arrays.equals(Object[], Object[]) dùng equals, không dùng reference identity. Record/value object thường phù hợp hơn class mutable khi array cần so sánh.
+
+## Complexity
+
+Sort O(n log n), search O(log n). Nếu chỉ tìm một lần trên dữ liệu nhỏ, linear search có thể đơn giản hơn; phải tính cả chi phí sort.
+
+## Bài tập
+
+Viết findOrInsertionPoint, test found, before-first, between, after-last và duplicate. Ghi rõ duplicate trả occurrence nào vì binary search không đảm bảo first/last.
 
 ## Lỗi thường gặp
 
-- Search unsorted array.
-- Nhầm negative result.
-- Dùng == cho arrays.
-
-## Bài tập ngắn
-
-Viết containsSorted và insertionPoint.
-
-## Interview prompt
-
-binarySearch O(log n) nhưng sort cost bao nhiêu?
-
-## Nguồn
-
-Transcript course lesson 124; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+Search array chưa sort, sort ascending nhưng search comparator descending, và dùng kết quả âm như index trực tiếp.

@@ -1,34 +1,32 @@
-# 134 — List và ArrayList Part 1
+# 134. List và ArrayList phần 1
 
-## Mục tiêu
+## List contract
 
-Dùng List abstraction và ArrayList implementation.
-
-## Mental model
-
-List giữ order, cho duplicates và index access; ArrayList dynamic contiguous storage.
-
-## Ví dụ Java 17
+List là sequence có index, giữ insertion order và cho phép duplicate. ArrayList dùng backing array resize khi cần.
 
 ~~~java
-java.util.List<String> items=new java.util.ArrayList<>();
-items.add("A");items.add("A");
+List<String> cities = new ArrayList<>();
+cities.add("Hue");
+cities.add(0, "Hanoi");
+cities.set(1, "Da Nang");
+String first = cities.get(0);
 ~~~
 
-## Lỗi thường gặp
+add cuối thường amortized O(1); get/set O(1); chèn/xóa giữa O(n) vì phải shift elements. size() là số phần tử hiện tại, không phải capacity.
 
-- Khai báo concrete type không cần.
-- Index bounds.
-- Modify List.of.
+## Mutation và immutable list
 
-## Bài tập ngắn
+~~~java
+List<String> fixed = List.of("A", "B");
+fixed.add("C"); // UnsupportedOperationException
+~~~
 
-CRUD list và test duplicates/order.
+Nếu cần mutable copy: new ArrayList<>(fixed). Document rõ method trả view hay snapshot.
 
-## Interview prompt
+## Bài tập
 
-ArrayList append amortized complexity?
+Implement grocery list add/remove/find không phân biệt case, test duplicate policy và empty index. Đoán exception khi get index ngoài range trước khi chạy.
 
-## Nguồn
+## Pitfalls
 
-Transcript course lesson 134; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+Nhầm add(index,value) với set, dùng index loop khi remove làm skip element, và sửa List.of.

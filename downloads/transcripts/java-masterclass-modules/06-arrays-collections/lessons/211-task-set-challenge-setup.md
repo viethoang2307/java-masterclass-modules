@@ -1,43 +1,22 @@
-# 211. Task Set challenge: phân tích yêu cầu
-
-## Mục tiêu
-
-- Thiết kế task identity trước khi dùng set.
-- Tách dữ liệu nguồn, dữ liệu hợp nhất và report.
+# 211. Task Set challenge: identity trước collection
 
 ## Câu hỏi thiết kế
 
-1. Task giống nhau theo ID hay theo `(project, description)`?
-2. Status có tham gia equality không?
-3. Cần giữ insertion order hay sort theo deadline?
-4. Khi hai nguồn có cùng task nhưng khác status, nguồn nào thắng?
+Task giống nhau theo ID hay project + description? Status có tham gia equality không? Cần insertion order hay sort deadline? Conflict giữa hai nguồn xử lý thế nào?
 
-```java
+~~~java
 record TaskKey(String project, String id) {}
-
 record Task(TaskKey key, String description, Status status) {
-    enum Status { TODO, IN_PROGRESS, DONE }
+    enum Status { PLANNED, IN_PROGRESS, DONE }
 }
-```
+~~~
 
-Nếu dùng `record Task` trực tiếp trong set, mọi component tham gia equality. Khi status đổi, old/new task bị xem là khác nhau; thường `TaskKey` mới là identity ổn định.
+Entity thường có identity ổn định; record equality toàn bộ state có thể sai nếu status thay đổi. Map<TaskKey,Task> thường phù hợp hơn Set<Task> khi cần phiên bản hiện tại.
 
-## Test trước khi code
+## Test trước code
 
-- Hai task cùng key, khác status.
-- Task chỉ có ở nguồn A hoặc B.
-- Input rỗng.
-- Dữ liệu trùng lặp nội bộ.
+Test cùng key khác status, task chỉ ở một nguồn, duplicate nội bộ, empty input và conflict policy.
 
-## Bài tập ngắn
+## Bài tập
 
-Viết bảng quyết định cho merge conflict giữa local và remote task.
-
-## Interview prompt
-
-Tại sao equality dựa trên toàn bộ state đôi khi sai với entity?
-
-## Nguồn
-
-- Transcript bài 211.
-- Java 17 API: records, `Set`, `Map`.
+Viết decision table cho merge local/remote và chọn winner rõ ràng. Không silently drop conflict.

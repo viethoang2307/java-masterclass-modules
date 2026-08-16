@@ -1,33 +1,25 @@
-# 126 — Arrays recap và pitfalls
+# 126. Array recap và pitfalls
 
-## Mục tiêu
+## Decision checklist
 
-Củng cố null, bounds, fixed length, mutation và copying.
+Chọn array khi length cố định, type đồng nhất và cần index O(1). Chọn collection khi size thay đổi, cần search/uniqueness/order semantics hoặc API phong phú hơn.
 
-## Mental model
+## Invariants cần nhớ
 
-Array API nhỏ nhưng aliasing mạnh: method nhận reference có thể mutate caller state.
+Array reference có thể null; length không đổi; index hợp lệ là [0,length); reference array có slot null; truyền array vào method truyền reference tới cùng object.
 
-## Ví dụ Java 17
+## Performance
 
-~~~java
-static int[] doubled(int[] a){int[] c=a.clone();for(int i=0;i<c.length;i++)c[i]*=2;return c;}
-~~~
+Array có locality tốt và overhead thấp. Resize thủ công cần allocate/copy. Đừng tối ưu bằng array trước khi biết operation và bottleneck; readability/contract quan trọng hơn microbenchmark đo sai.
 
-## Lỗi thường gặp
+## Debug exercise
 
-- Alias vô ý.
-- Clone shallow.
-- Loop condition <= length.
+Cho đoạn code có ArrayIndexOutOfBoundsException, NullPointerException, aliasing và binary search sai precondition. Với mỗi lỗi, ghi input tối thiểu tái hiện, invariant bị phá và fix.
 
-## Bài tập ngắn
+## Bài tập tổng hợp
 
-Audit 10 lỗi array và viết regression tests.
+Implement ArrayReport gồm min/max/sum/search/sorted copy. Self-check phải chứng minh overflow policy, input không đổi và empty/null contract.
 
-## Interview prompt
+## Checkpoint
 
-Array covariance có rủi ro gì?
-
-## Nguồn
-
-Transcript course lesson 126; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+Bạn phải giải thích được khác biệt giữa reference copy, element copy, shallow copy/deep copy và khi nào chuyển sang List.

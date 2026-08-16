@@ -1,43 +1,24 @@
-# 203. Collections: thuật toán nâng cao
+# 203. Collections algorithms nâng cao
 
-## Mục tiêu
+## Mutating algorithms
 
-- Dùng `reverse`, `swap`, `replaceAll`, `disjoint` và `addAll`.
-- Phân biệt thuật toán sửa dữ liệu và thuật toán truy vấn.
-
-```java
+~~~java
 List<String> queue = new ArrayList<>(List.of("A", "B", "C"));
-Collections.swap(queue, 0, 2);       // [C, B, A]
-Collections.reverse(queue);          // [A, B, C]
+Collections.swap(queue, 0, 2);
+Collections.reverse(queue);
 Collections.replaceAll(queue, "B", "B2");
+~~~
 
-boolean separate = Collections.disjoint(
-        queue, List.of("X", "Y"));  // true
-```
+swap/reverse/replaceAll sửa list tại chỗ. Collections.disjoint chỉ đọc và trả true khi hai collection không có phần tử equals nhau.
 
-## Phân tích contract
+## Equality và performance
 
-- `reverse`, `swap`, `replaceAll`: mutate list và cần list sửa được.
-- `disjoint`: chỉ đọc; trả `true` khi hai collection không có phần tử bằng nhau.
-- `Collections.addAll(target, values...)`: tiện khi đầu vào là varargs.
+replaceAll/disjoint dựa vào equals. Complexity phụ thuộc implementation; swap theo index trên LinkedList có thể cần traversal. Đừng suy luận Big-O chỉ từ tên method.
 
-Độ phức tạp phụ thuộc implementation. Chẳng hạn `swap` theo index hiệu quả trên `ArrayList` hơn `LinkedList` ở index xa.
+## Bài tập
+
+Biến đổi lịch thi đấu bằng swap/reverse, rồi assert tập đội không đổi. Test mutable ArrayList, immutable List.of và custom value object equality.
 
 ## Lỗi thường gặp
 
-- Thao tác trên `List.of(...)` rồi gặp `UnsupportedOperationException`.
-- Quên equality của phần tử quyết định việc replace/disjoint.
-- Suy luận Big-O chỉ từ tên method mà bỏ qua collection cụ thể.
-
-## Bài tập ngắn
-
-Biến đổi lịch thi đấu bằng `swap` và `reverse`, sau đó xác minh tập đội không đổi.
-
-## Interview prompt
-
-Một static algorithm có cùng Big-O trên mọi implementation của `List` không?
-
-## Nguồn
-
-- Transcript bài 203.
-- Java 17 API: `Collections`.
+Sửa immutable list, nhầm disjoint với subset, và không phân biệt list content change với collection membership change.

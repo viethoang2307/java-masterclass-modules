@@ -1,34 +1,27 @@
-# 150 — Enums custom methods và switch
+# 150. Enum, switch và methods
 
-## Mục tiêu
-
-Gắn behavior/data vào enum và dùng switch expression exhaustive.
-
-## Mental model
-
-Enum method centralizes mapping; switch closed set hỗ trợ compile checks khi thêm constants.
-
-## Ví dụ Java 17
+## Switch expression
 
 ~~~java
-enum Day{MON,TUE; boolean workday(){return true;}}
-String x=switch(Day.MON){case MON->"M";case TUE->"T";};
+static int weight(Priority priority) {
+    return switch (priority) {
+        case LOW -> 1;
+        case MEDIUM -> 2;
+        case HIGH -> 3;
+    };
+}
 ~~~
 
-## Lỗi thường gặp
+Switch expression trả value và compiler có thể kiểm tra exhaustive với enum. Null vẫn gây NullPointerException nếu không xử lý trước.
 
-- Default che missing enum.
-- Mutability trong enum.
-- Switch string thay enum.
+## Behavior nằm ở đâu?
 
-## Bài tập ngắn
+Nếu label/weight gắn chặt với enum, đặt method trong enum. Nếu policy thay đổi theo configuration/user, dùng service/strategy thay vì hard-code mọi thứ vào enum.
 
-Tạo Priority weight và comparator.
+## Bài tập
 
-## Interview prompt
+Implement task scheduler sort theo priority weight giảm, name tăng. Test tie-breaker, null priority, parse case và immutable result.
 
-Enum singleton có thread-safety mặc định nào?
+## Checkpoint
 
-## Nguồn
-
-Transcript course lesson 150; ví dụ chuẩn hóa Java 17, bổ sung contract, complexity và boundary cases.
+Enum là closed set tốt cho state/role/category; không nên biến thành nơi chứa toàn bộ business system.

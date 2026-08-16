@@ -1,48 +1,31 @@
-# 210. Phép toán tập hợp
+# 210. Union, intersection và difference
 
-## Mục tiêu
+## Bulk operations
 
-- Thực hiện union, intersection, difference và subset.
-- Tránh vô tình sửa tập nguồn.
-
-```java
+~~~java
 Set<String> a = Set.of("java", "sql", "git");
 Set<String> b = Set.of("java", "docker");
 
 Set<String> union = new HashSet<>(a);
 union.addAll(b);
 
-Set<String> intersection = new HashSet<>(a);
-intersection.retainAll(b);
+Set<String> common = new HashSet<>(a);
+common.retainAll(b);
 
-Set<String> difference = new HashSet<>(a);
-difference.removeAll(b);
-```
+Set<String> onlyA = new HashSet<>(a);
+onlyA.removeAll(b);
+~~~
 
-`a.containsAll(b)` kiểm tra `b ⊆ a`. Bulk operations mutate receiver, vì vậy tạo working copy khi muốn bảo toàn input.
+Bulk methods mutate receiver, nên tạo working copy nếu cần bảo toàn input. containsAll kiểm tra subset.
 
-## Ứng dụng
+## Symmetric difference
 
-- Permission effective/required/missing.
-- Tag chung giữa hai sản phẩm.
-- Thành viên tham dự nhiều sự kiện.
-- Đồng bộ dữ liệu hai nguồn.
+A xor B là union trừ intersection, hoặc (A\\B) union (B\\A). Test partition bằng union/intersection để bắt sai chiều removeAll.
 
-## Lỗi thường gặp
+## Bài tập
 
-- Gọi `retainAll` trực tiếp trên tập cần giữ nguyên.
-- Nhầm `removeAll` theo chiều A\B và B\A.
-- Dùng set khi số lần xuất hiện là thông tin quan trọng.
+Tính missing permissions, common tags và quyền dư giữa requested/granted. Trả immutable result và test input không đổi.
 
-## Bài tập ngắn
+## Pitfalls
 
-Tính quyền còn thiếu và quyền dư giữa requested permissions với granted permissions.
-
-## Interview prompt
-
-Làm sao biểu diễn symmetric difference bằng các bulk operation?
-
-## Nguồn
-
-- Transcript bài 210.
-- Java 17 API: `Set`, `Collection` bulk operations.
+Gọi retainAll trực tiếp trên tập nguồn, nhầm A\\B với B\\A, và dùng Set khi multiplicity quan trọng.

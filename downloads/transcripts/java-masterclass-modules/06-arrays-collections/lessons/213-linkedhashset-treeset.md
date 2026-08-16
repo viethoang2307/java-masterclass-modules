@@ -1,38 +1,22 @@
-# 213. `LinkedHashSet` và `TreeSet`
+# 213. LinkedHashSet và TreeSet
 
-## Mục tiêu
+## Chọn theo ordering
 
-- Chọn set implementation theo ordering.
-- Phân biệt equality của hash set và ordering equality của sorted set.
+HashSet: không bảo đảm order, average O(1). LinkedHashSet: insertion order, average O(1) với link overhead. TreeSet: sorted order, O(log n).
 
-| Loại | Thứ tự | Chi phí phổ biến |
-|---|---|---|
-| `HashSet` | Không bảo đảm | O(1) average |
-| `LinkedHashSet` | Insertion order | O(1) average, tốn thêm liên kết |
-| `TreeSet` | Sorted order | O(log n) |
-
-```java
+~~~java
 Set<String> insertion = new LinkedHashSet<>();
 NavigableSet<Integer> sorted = new TreeSet<>(List.of(9, 2, 7));
-```
+~~~
 
-`TreeSet` xem hai phần tử là trùng nếu comparator trả `0`, dù `equals` có thể trả `false`. Comparator nên nhất quán với equality khi collection đại diện uniqueness nghiệp vụ.
+## Comparator và uniqueness
 
-## Lỗi thường gặp
+TreeSet xem hai phần tử là trùng nếu comparator trả 0, dù equals có thể false. Comparator nên dùng đủ tie-breaker và nhất quán với identity nếu collection đại diện uniqueness nghiệp vụ.
 
-- Chọn `TreeSet` chỉ để output đẹp, dù sort một lần ở rìa đủ dùng.
-- Comparator chỉ so một field không unique, làm “mất” phần tử.
-- Trông chờ `LinkedHashSet` tự sort.
+## Bài tập
 
-## Bài tập ngắn
+Lưu event theo row/number hoặc timestamp/ID; test hai event cùng timestamp vẫn tồn tại. Test output order của cả ba implementation.
 
-Lưu event theo timestamp và ID, bảo đảm hai event cùng thời điểm vẫn tồn tại.
+## Pitfalls
 
-## Interview prompt
-
-Vì sao comparator trả `0` quyết định uniqueness trong `TreeSet`?
-
-## Nguồn
-
-- Transcript bài 213.
-- Java 17 API: `LinkedHashSet`, `TreeSet`, `Comparator`.
+Chọn TreeSet chỉ để output đẹp, comparator chỉ so một field và trông chờ LinkedHashSet tự sort.

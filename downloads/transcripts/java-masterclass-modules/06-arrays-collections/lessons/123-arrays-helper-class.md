@@ -1,35 +1,29 @@
-# 123 — Arrays sort, fill và copy
+# 123. Arrays helper class
 
-## Mục tiêu
-
-Dùng java.util.Arrays cho sort/fill/copyOf/toString.
-
-## Mental model
-
-Arrays methods thường mutate input; copyOf tạo array mới và có thể pad default values.
-
-## Ví dụ Java 17
+## Các method cần biết
 
 ~~~java
-int[] a={3,1,2};
-java.util.Arrays.sort(a);
-int[] copy=java.util.Arrays.copyOf(a,5);
+int[] values = {4, 1, 9, 1};
+Arrays.sort(values);
+System.out.println(Arrays.toString(values)); // [1, 1, 4, 9]
+int[] copy = Arrays.copyOf(values, 6);
+Arrays.fill(copy, 4, 6, -1);
 ~~~
 
-## Lỗi thường gặp
+Arrays.toString dành cho array một chiều; Arrays.deepToString dành cho nested array. Arrays.equals so value theo phần tử; == chỉ so reference.
 
-- Sort làm mất order cũ.
-- copyOf length lớn thêm 0.
-- In array bằng toString object.
+## Copy và range
 
-## Bài tập ngắn
+copyOf có thể đổi length; slot mới nhận default value. copyOfRange(array, from, to) dùng half-open range [from,to), giống nhiều API Java.
 
-Sort copy mà giữ original.
+## Sort và equality
 
-## Interview prompt
+Arrays.sort mutate array. Nếu cần giữ input, copy trước. Với object array, sort dựa natural order hoặc comparator; phần tử null có thể gây lỗi tùy comparator.
 
-Shallow copy object array nghĩa là gì?
+## Bài tập
 
-## Nguồn
+Viết report trước/sau sort, chứng minh input không đổi khi dùng defensive copy, và test nested array với deepEquals.
 
-Transcript course lesson 123; ví dụ được chuẩn hóa Java 17 và bổ sung contract, complexity, boundary cases.
+## Pitfalls
+
+In System.out.println(array) chỉ thấy object identity; dùng sai inclusive endpoint; sort nhầm object mutable mà comparator dựa trên field có thể đổi.
