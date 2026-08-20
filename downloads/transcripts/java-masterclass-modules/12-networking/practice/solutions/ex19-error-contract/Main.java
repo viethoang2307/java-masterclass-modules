@@ -1,0 +1,1 @@
+public class Main { public static String outcome(int s,boolean t) { if(t)return "TIMEOUT"; if(s>=200&&s<300)return "OK"; if(s==429||s>=500)return "RETRYABLE"; if(s>=400&&s<500)return "BAD_REQUEST"; return "RETRYABLE"; } }

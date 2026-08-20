@@ -1,0 +1,1 @@
+public class SelfCheck { public static void main(String[] a) { if(!"RUNNING".equals(Main.next("STARTING","BOUND"))||!"DRAINING".equals(Main.next("RUNNING","STOP"))||!"STOPPED".equals(Main.next("DRAINING","DRAINED"))) throw new AssertionError(); System.out.println("PASS"); } }

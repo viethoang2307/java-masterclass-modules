@@ -1,0 +1,1 @@
+public class SelfCheck { public static void main(String[] a) { if(!Main.allowed("Accept")||!Main.allowed("content-type")||Main.allowed("Authorization")) throw new AssertionError(); System.out.println("PASS"); } }

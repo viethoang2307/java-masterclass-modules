@@ -1,0 +1,1 @@
+import java.util.Arrays; public class SelfCheck { public static void main(String[] a) { if (!Arrays.equals(Main.encode("hi"),new byte[]{0,0,0,2,'h','i'})) throw new AssertionError(); System.out.println("PASS"); } }

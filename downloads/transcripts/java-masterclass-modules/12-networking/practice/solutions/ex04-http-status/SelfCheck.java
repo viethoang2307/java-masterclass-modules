@@ -1,0 +1,1 @@
+public class SelfCheck { public static void main(String[] a) { if (!"SUCCESS".equals(Main.classify(201))||!"CLIENT_ERROR".equals(Main.classify(404))||!"SERVER_ERROR".equals(Main.classify(503))) throw new AssertionError(); System.out.println("PASS"); } }

@@ -1,0 +1,1 @@
+public class Main { public static String aggregate(boolean[] r) { if(r==null||r.length==0) throw new IllegalArgumentException(); int ok=0; for(boolean b:r) if(b)ok++; return ok==0?"FAIL":ok==r.length?"SUCCESS":"PARTIAL"; } }

@@ -1,0 +1,1 @@
+public class Main { public static String next(String s,String e) { return switch(s+":"+e) { case "CONNECTING:ACCEPT"->"OPEN"; case "OPEN:CLOSE"->"CLOSING"; case "CLOSING:ACK"->"CLOSED"; default->throw new IllegalStateException(); }; } }

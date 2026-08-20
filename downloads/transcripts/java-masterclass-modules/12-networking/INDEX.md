@@ -1,3 +1,41 @@
-# Module 12 — Lesson Index
+# Index — Module 12
 
-383–408, 724–732.
+## Lessons
+
+- [388 — Channels và ByteBuffer](lessons/388-channels-buffers.md)
+- [389 — Blocking vs non-blocking](lessons/389-blocking-nonblocking.md)
+- [390 — Selector event loop](lessons/390-selector.md)
+- [391 — TCP ServerSocket](lessons/391-tcp-server.md)
+- [392 — TCP framing](lessons/392-tcp-framing.md)
+- [393 — Datagram và UDP](lessons/393-udp.md)
+- [394 — DatagramChannel](lessons/394-datagram-channel.md)
+- [395 — URI và URL](lessons/395-uri-url.md)
+- [396 — HttpURLConnection](lessons/396-http-url-connection.md)
+- [397 — HTTP POST](lessons/397-http-post.md)
+- [398 — Java HttpClient](lessons/398-http-client.md)
+- [399 — HTTP status/headers](lessons/399-http-response.md)
+- [400 — HTTP/2 và version policy](lessons/400-http2.md)
+- [401 — Async HttpClient](lessons/401-async-http.md)
+- [402 — Concurrent fan-out](lessons/402-http-fanout.md)
+- [403 — BodyHandler và streaming](lessons/403-body-handler.md)
+- [404 — Thread-safe response handling](lessons/404-thread-safe-handler.md)
+- [405 — WebSocket concepts](lessons/405-websocket.md)
+- [406 — WebSocket framing](lessons/406-websocket-framing.md)
+- [407 — Protocol state machine](lessons/407-protocol-state.md)
+- [408 — Server lifecycle](lessons/408-server-lifecycle.md)
+- [409 — Timeout/retry/cancellation](lessons/409-timeouts-retries.md)
+- [410 — Back-pressure](lessons/410-backpressure.md)
+- [411 — Network security](lessons/411-network-security.md)
+- [412 — Testing local protocols](lessons/412-network-testing.md)
+- [413 — Observability](lessons/413-network-observability.md)
+- [414 — DNS and connection reuse](lessons/414-dns-connection.md)
+- [415 — Binary protocol design](lessons/415-binary-protocol.md)
+- [416 — HTTP API client design](lessons/416-api-client-design.md)
+- [417 — Networking capstone](lessons/417-networking-capstone.md)
+
+## Practice
+
+- [Practice overview](practice/README.md)
+- [Verify solutions](practice/verify-solutions.ps1)
+- Starter: [`practice/code`](practice/code)
+- Solutions: [`practice/solutions`](practice/solutions)

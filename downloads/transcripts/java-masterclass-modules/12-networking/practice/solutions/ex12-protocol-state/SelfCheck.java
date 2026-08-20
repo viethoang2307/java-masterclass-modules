@@ -1,0 +1,1 @@
+public class SelfCheck { public static void main(String[] a) { if(!"OPEN".equals(Main.next("CONNECTING","ACCEPT"))||!"CLOSING".equals(Main.next("OPEN","CLOSE"))||!"CLOSED".equals(Main.next("CLOSING","ACK"))) throw new AssertionError(); System.out.println("PASS"); } }
