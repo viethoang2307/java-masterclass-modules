@@ -1,0 +1,1 @@
+import java.util.*;public class Main{public static List<String>filter(List<String>l,String q){if(l==null||q==null)throw new IllegalArgumentException();String x=q.toLowerCase(Locale.ROOT);return l.stream().filter(s->s.toLowerCase(Locale.ROOT).contains(x)).toList();}}

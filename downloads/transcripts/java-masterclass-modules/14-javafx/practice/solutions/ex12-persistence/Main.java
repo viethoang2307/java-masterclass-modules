@@ -1,0 +1,1 @@
+import java.util.*;public class Main{public static String save(List<String>l){return String.join("\n",l);}public static List<String>load(String s){if(s==null||s.isEmpty())return List.of();return Arrays.stream(s.split("\\R")).filter(x->!x.isEmpty()).toList();}}

@@ -1,0 +1,1 @@
+public class SelfCheck{public static void main(String[]a){if(!"Save".equals(Main.label("Save","button"))||!"button".equals(Main.label("","button")))throw new AssertionError();System.out.println("PASS");}}
