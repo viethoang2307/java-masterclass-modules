@@ -1,0 +1,1 @@
+public class Main{public static String oracle(boolean[]r){if(r==null||r.length==0)throw new IllegalArgumentException();int n=0;for(boolean b:r)if(b)n++;return n==0?"FAIL":n==r.length?"SUCCESS":"DEGRADED";}}

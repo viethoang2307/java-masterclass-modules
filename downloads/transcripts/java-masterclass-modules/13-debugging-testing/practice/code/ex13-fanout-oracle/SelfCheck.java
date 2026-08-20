@@ -1,0 +1,1 @@
+public class SelfCheck{public static void main(String[]a){if(!"SUCCESS".equals(Main.oracle(new boolean[]{true,true}))||!"DEGRADED".equals(Main.oracle(new boolean[]{true,false}))||!"FAIL".equals(Main.oracle(new boolean[]{false})))throw new AssertionError();System.out.println("PASS");}}

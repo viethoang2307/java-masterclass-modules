@@ -1,0 +1,1 @@
+public class SelfCheck{public static void main(String[]a){if(Main.divide(9,3)!=3)throw new AssertionError();try{Main.divide(1,0);throw new AssertionError();}catch(ArithmeticException e){}System.out.println("PASS");}}

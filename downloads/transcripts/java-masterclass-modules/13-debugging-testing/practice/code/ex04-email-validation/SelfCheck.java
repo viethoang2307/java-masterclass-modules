@@ -1,0 +1,1 @@
+public class SelfCheck{public static void main(String[]a){if(!Main.valid("a@example.com")||Main.valid("a@")||Main.valid("a@@b")||Main.valid(""))throw new AssertionError();System.out.println("PASS");}}

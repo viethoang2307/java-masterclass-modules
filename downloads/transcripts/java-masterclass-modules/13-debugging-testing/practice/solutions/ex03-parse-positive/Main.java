@@ -1,0 +1,1 @@
+public class Main{public static int parse(String s){try{int n=Integer.parseInt(s);if(n<=0)throw new IllegalArgumentException();return n;}catch(NumberFormatException|NullPointerException e){throw new IllegalArgumentException(e);}}}
