@@ -1,37 +1,32 @@
-# Module 01 — Orientation và Toolchain
+# Module 01 — Orientation, Git và Maven Toolchain
 
 ## Mục tiêu
 
 Sau module này, người học hiểu scope của khóa học, biết chọn JDK, phân biệt JDK/JVM/IDE/JShell và thiết lập workflow học có thể lặp lại.
 
-## Dependency
-
-Không yêu cầu Java trước đó. Đây là module mở đầu.
-
 ## Lộ trình
 
-1. Lesson 001 — Course Introduction
-2. Lesson 002 — Remaster và Java 17
-3. Lesson 003 — Video quality và cách học từ video
-4. Lesson 004 — Subtitles
-5. Lesson 005 — Hỏi đáp và chuyển từ JShell sang IDE
+1. Course Introduction.
+2. Remaster và Java 17.
+3. Video quality và cách học từ video.
+4. Subtitles.
+5. Help, JShell và IntelliJ IDEA.
+6. Git và Maven workflow.
+7. Reproducible build và CI entry point.
 
-## Legacy/reference lessons
+## Kết quả cần đạt
 
-Các bài 029–031 và 476–491 là setup/track cũ hoặc duplicate. Chỉ mở khi cần đối chiếu môi trường.
-
-## Module checkpoint
+- Biết kiểm tra JDK trong terminal và IDE.
+- Biết tạo branch, đọc diff, commit có mục đích và push an toàn.
+- Hiểu pom.xml, Maven lifecycle và lệnh clean/test/package/verify.
+- Viết README setup để người khác clone, build và test được.
+- Phân biệt local convenience với command CI chính thức.
 
 ## Practice
 
-Bộ practice gồm 20 bài từ Medium đến Extreme, kết hợp code Java với evidence workflow cho JDK, JShell, CLI và IntelliJ.
+Bộ practice gồm 20 bài từ Medium đến Extreme, kết hợp code Java với evidence workflow cho JDK, JShell, CLI, IntelliJ, Git và reproducible build.
 
 - [Practice README](practice/README.md)
 - [Starter code](practice/code)
 - [Solutions](practice/solutions)
 - [Solution verifier](practice/verify-solutions.ps1)
-
-- Tôi biết JDK nào đang chạy trong terminal và IDE.
-- Tôi biết khi nào dùng JShell và khi nào tạo project.
-- Tôi biết cách ghi một câu hỏi kỹ thuật có thể nhận được hỗ trợ.
-- Tôi có thể tạo một checklist setup cho project Java.

@@ -30,6 +30,8 @@
 | 516 | Expressions/statements section intro | 516 - Introduction | Done |
 | 517 | Keywords and expressions | 517 - Keywords | Done |
 | 518 | Statements, whitespace, indentation | 518 - Statements | Done |
+| 519 | [String chuyên sâu](lessons/519-string-deep-dive.md) | Bổ sung roadmap | Done |
+| 520 | [Wrapper Classes, boxing và unboxing](lessons/520-wrapper-classes-boxing.md) | Bổ sung roadmap | Done |
 
 ## Practice
 
