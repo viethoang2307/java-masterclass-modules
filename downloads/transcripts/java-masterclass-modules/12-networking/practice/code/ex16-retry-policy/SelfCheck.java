@@ -1,0 +1,1 @@
+public class SelfCheck { public static void main(String[] a) { if(!Main.retry(503,0)||!Main.retry(429,2)||Main.retry(404,0)||Main.retry(503,3)) throw new AssertionError(); System.out.println("PASS"); } }

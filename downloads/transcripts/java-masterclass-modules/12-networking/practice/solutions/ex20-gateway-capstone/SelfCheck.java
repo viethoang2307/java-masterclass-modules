@@ -1,0 +1,1 @@
+public class SelfCheck { public static void main(String[] a) { if(!"ACCEPTED".equals(Main.accept("event:x",1,2))||!"REJECTED_SIZE".equals(Main.accept("12345678901",0,2))||!"REJECTED_CAPACITY".equals(Main.accept("event:x",2,2))||!"REJECTED_SCHEMA".equals(Main.accept("bad",0,2))) throw new AssertionError(); System.out.println("PASS"); } }

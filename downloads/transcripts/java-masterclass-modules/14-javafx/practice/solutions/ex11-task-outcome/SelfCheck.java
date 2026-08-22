@@ -1,0 +1,1 @@
+public class SelfCheck{public static void main(String[]a){if(!"SUCCESS".equals(Main.state(true,false))||!"CANCELLED".equals(Main.state(false,true))||!"FAILED".equals(Main.state(false,false)))throw new AssertionError();System.out.println("PASS");}}

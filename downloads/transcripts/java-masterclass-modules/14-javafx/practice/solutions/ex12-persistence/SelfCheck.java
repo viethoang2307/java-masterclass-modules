@@ -1,0 +1,1 @@
+import java.util.*;public class SelfCheck{public static void main(String[]a){String s=Main.save(List.of("a","b"));if(!List.of("a","b").equals(Main.load(s)))throw new AssertionError();System.out.println("PASS");}}

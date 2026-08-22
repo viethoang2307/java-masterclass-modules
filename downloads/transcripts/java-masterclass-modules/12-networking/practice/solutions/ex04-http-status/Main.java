@@ -1,0 +1,1 @@
+public class Main { public static String classify(int s) { if(s<100||s>599) throw new IllegalArgumentException(); int c=s/100; return c==2?"SUCCESS":c==3?"REDIRECT":c==4?"CLIENT_ERROR":"SERVER_ERROR"; } }

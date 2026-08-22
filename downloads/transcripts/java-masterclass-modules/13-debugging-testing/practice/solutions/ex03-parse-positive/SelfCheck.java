@@ -1,0 +1,1 @@
+public class SelfCheck{public static void main(String[]a){if(Main.parse("42")!=42)throw new AssertionError();try{Main.parse("0");throw new AssertionError();}catch(IllegalArgumentException e){}System.out.println("PASS");}}

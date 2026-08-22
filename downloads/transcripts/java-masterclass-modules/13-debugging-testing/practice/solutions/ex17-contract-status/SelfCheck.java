@@ -1,0 +1,1 @@
+public class SelfCheck{public static void main(String[]a){if(!"SUCCESS".equals(Main.body(200))||!"ERROR".equals(Main.body(400))||!"ERROR".equals(Main.body(500)))throw new AssertionError();System.out.println("PASS");}}

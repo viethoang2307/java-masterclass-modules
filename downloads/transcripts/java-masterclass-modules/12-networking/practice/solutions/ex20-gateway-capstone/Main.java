@@ -1,0 +1,1 @@
+public class Main { public static String accept(String b,int in,int limit) { if(b==null||b.length()>10)return "REJECTED_SIZE"; if(in>=limit)return "REJECTED_CAPACITY"; if(!b.startsWith("event:"))return "REJECTED_SCHEMA"; return "ACCEPTED"; } }

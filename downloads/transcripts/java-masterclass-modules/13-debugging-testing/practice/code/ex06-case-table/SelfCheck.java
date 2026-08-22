@@ -1,0 +1,1 @@
+public class SelfCheck{public static void main(String[]a){if(!"FAIL".equals(Main.grade(49))||!"PASS".equals(Main.grade(50))||!"DISTINCTION".equals(Main.grade(75)))throw new AssertionError();System.out.println("PASS");}}

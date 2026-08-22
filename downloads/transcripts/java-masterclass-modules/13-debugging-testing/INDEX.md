@@ -1,5 +1,44 @@
-# Module 13 — Lesson Index
+# Index — Module 13
 
+## Lessons
+
+- [409 — Debugger mental model](lessons/409-debugger-model.md)
+- [410 — Breakpoints và stepping](lessons/410-breakpoints.md)
+- [411 — Watches và field watchpoint](lessons/411-watches.md)
+- [412 — Stack trace và cause](lessons/412-stack-trace.md)
+- [413 — Logging có context](lessons/413-logging.md)
+- [414 — Thread dump](lessons/414-thread-dump.md)
+- [415 — JUnit assertions](lessons/415-assertions.md)
+- [416 — Test lifecycle](lessons/416-test-lifecycle.md)
+- [417 — Exception và timeout test](lessons/417-exception-timeout.md)
+- [418 — Parameterized test](lessons/418-parameterized.md)
+- [419 — Nested/repeated test](lessons/419-nested-repeated.md)
+- [420 — Test challenge workflow](lessons/420-test-challenges.md)
+- [421 — Fake/mock/stub/spy](lessons/421-test-doubles.md)
+- [422 — State vs interaction test](lessons/422-state-interaction.md)
+- [423 — Boundary testing](lessons/423-boundaries.md)
+- [424 — Property/invariant testing](lessons/424-properties.md)
+- [425 — Regression test](lessons/425-regression.md)
+- [426 — Flaky test](lessons/426-flaky-tests.md)
+- [427 — Concurrent test](lessons/427-concurrent-tests.md)
+- [428 — Coverage](lessons/428-coverage.md)
+- [429 — Mutation mindset](lessons/429-mutation.md)
+- [430 — Test data builders](lessons/430-test-data.md)
+- [431 — CI test gates](lessons/431-ci-gates.md)
+- [432 — Test observability](lessons/432-test-observability.md)
+- [433 — Design for testability](lessons/433-testability-design.md)
+- [434 — Performance test](lessons/434-performance-test.md)
+- [435 — Contract test](lessons/435-contract-test.md)
+- [436 — Integration boundary](lessons/436-integration-test.md)
+- [437 — Debugging incident](lessons/437-debug-incident.md)
+- [438 — Testing capstone](lessons/438-testing-capstone.md)
+
+## Practice
+
+- [Practice overview](practice/README.md)
+- [Verify solutions](practice/verify-solutions.ps1)
+- [Starter code](practice/code)
+- [Solutions](practice/solutions)
 | # | Lesson | Nội dung | Status |
 |---:|---|---|---|
 | 409–419 | Debugging và testing foundation | debugger, breakpoints, stack trace, assertions | Existing |

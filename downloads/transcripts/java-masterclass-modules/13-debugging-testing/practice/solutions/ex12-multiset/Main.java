@@ -1,0 +1,1 @@
+import java.util.*; public class Main{public static boolean same(int[]a,int[]b){if(a==null||b==null)return a==b;if(a.length!=b.length)return false;int[]x=a.clone(),y=b.clone();Arrays.sort(x);Arrays.sort(y);return Arrays.equals(x,y);}}

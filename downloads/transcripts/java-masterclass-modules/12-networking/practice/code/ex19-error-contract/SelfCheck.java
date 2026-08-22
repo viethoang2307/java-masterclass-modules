@@ -1,0 +1,1 @@
+public class SelfCheck { public static void main(String[] a) { if(!"TIMEOUT".equals(Main.outcome(0,true))||!"OK".equals(Main.outcome(200,false))||!"RETRYABLE".equals(Main.outcome(503,false))||!"BAD_REQUEST".equals(Main.outcome(400,false))) throw new AssertionError(); System.out.println("PASS"); } }

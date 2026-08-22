@@ -1,0 +1,1 @@
+public class Main { public static String next(String s,String e) { return switch(s+":"+e){case "STARTING:BOUND"->"RUNNING";case "RUNNING:STOP"->"DRAINING";case "DRAINING:DRAINED"->"STOPPED";default->throw new IllegalStateException();}; } }

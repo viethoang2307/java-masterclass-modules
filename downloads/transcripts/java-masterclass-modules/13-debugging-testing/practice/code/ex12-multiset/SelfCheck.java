@@ -1,0 +1,1 @@
+public class SelfCheck{public static void main(String[]a){if(!Main.same(new int[]{1,2,1},new int[]{2,1,1})||Main.same(new int[]{1},new int[]{1,1}))throw new AssertionError();System.out.println("PASS");}}

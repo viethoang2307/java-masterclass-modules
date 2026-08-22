@@ -1,0 +1,1 @@
+public class SelfCheck { public static void main(String[] a) { if(!"SUCCESS".equals(Main.aggregate(new boolean[]{true,true}))||!"PARTIAL".equals(Main.aggregate(new boolean[]{true,false}))||!"FAIL".equals(Main.aggregate(new boolean[]{false,false}))) throw new AssertionError(); System.out.println("PASS"); } }

@@ -1,0 +1,1 @@
+public class SelfCheck { public static void main(String[] a) { if(!"TEXT".equals(Main.opcode(1))||!"PING".equals(Main.opcode(9))||!"CLOSE".equals(Main.opcode(8))) throw new AssertionError(); System.out.println("PASS"); } }

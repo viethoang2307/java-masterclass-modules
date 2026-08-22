@@ -1,0 +1,1 @@
+public class Main { public static String opcode(int v) { return switch(v){case 1->"TEXT";case 2->"BINARY";case 8->"CLOSE";case 9->"PING";case 10->"PONG";default->throw new IllegalArgumentException();}; } }

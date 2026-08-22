@@ -1,0 +1,1 @@
+import java.util.*;public class SelfCheck{public static void main(String[]a){List<String>l=new ArrayList<>();if(!"1|Buy".equals(Main.add(l," Buy ")))throw new AssertionError();System.out.println("PASS");}}

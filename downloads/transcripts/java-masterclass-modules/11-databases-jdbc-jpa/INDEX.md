@@ -1,3 +1,46 @@
-# Module 11 — Lesson Index
+# Index — Module 11
 
-353–382, 690–723.
+## Lessons
+
+- [353 — JDBC và relational database](lessons/353-jdbc-overview.md)
+- [354 — RDBMS, schema và table](lessons/354-relational-model.md)
+- [355 — SQL DDL/DML](lessons/355-sql-ddl-dml.md)
+- [356 — Key, constraint và normalization](lessons/356-keys-constraints.md)
+- [357 — JDBC resource model](lessons/357-jdbc-resource-model.md)
+- [358 — DriverManager và DataSource](lessons/358-connections.md)
+- [359 — Statement và execute variants](lessons/359-statements.md)
+- [360 — PreparedStatement](lessons/360-prepared-statement.md)
+- [361 — SELECT và ResultSet](lessons/361-select-resultset.md)
+- [362 — Row mapping](lessons/362-row-mapping.md)
+- [363 — SQL injection và whitelist](lessons/363-sql-security.md)
+- [364 — INSERT/UPDATE/DELETE](lessons/364-dml.md)
+- [365 — Generated keys](lessons/365-generated-keys.md)
+- [366 — Transaction commit/rollback](lessons/366-transactions.md)
+- [367 — Savepoint và isolation](lessons/367-savepoint-isolation.md)
+- [368 — Batch processing](lessons/368-batch.md)
+- [369 — Pagination and streaming](lessons/369-pagination.md)
+- [370 — SQLException taxonomy](lessons/370-sql-exceptions.md)
+- [371 — CallableStatement IN/OUT](lessons/371-callable-statement.md)
+- [372 — Stored procedure/function](lessons/372-stored-procedures.md)
+- [373 — Repository boundary](lessons/373-repository-design.md)
+- [374 — Service transaction boundary](lessons/374-service-transactions.md)
+- [375 — ORM và JPA overview](lessons/375-jpa-overview.md)
+- [376 — Entity lifecycle](lessons/376-entity-lifecycle.md)
+- [377 — Mapping relationship](lessons/377-entity-mapping.md)
+- [378 — JPQL và parameters](lessons/378-jpql.md)
+- [379 — Fetch plan và N+1](lessons/379-fetch-n-plus-one.md)
+- [380 — Cascade và orphan removal](lessons/380-cascade.md)
+- [381 — Optimistic/pessimistic locking](lessons/381-locking.md)
+- [382 — JPA transaction semantics](lessons/382-jpa-transactions.md)
+- [383 — Connection pool](lessons/383-connection-pool.md)
+- [384 — Migration và schema versioning](lessons/384-migrations.md)
+- [385 — Database testing](lessons/385-database-testing.md)
+- [386 — Observability và performance](lessons/386-db-observability.md)
+- [387 — Database capstone](lessons/387-database-capstone.md)
+
+## Practice
+
+- [Practice overview](practice/README.md)
+- [Verify solutions](practice/verify-solutions.ps1)
+- Starter: [`practice/code`](practice/code)
+- Solutions: [`practice/solutions`](practice/solutions)

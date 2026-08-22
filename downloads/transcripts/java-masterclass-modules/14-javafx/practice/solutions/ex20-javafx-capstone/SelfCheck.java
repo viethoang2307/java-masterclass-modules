@@ -1,0 +1,1 @@
+public class SelfCheck{public static void main(String[]a){if(!"READY".equals(Main.verdict(true,true,true,false))||!"BLOCKED".equals(Main.verdict(false,true,true,false))||!"ERROR".equals(Main.verdict(true,true,true,true)))throw new AssertionError();System.out.println("PASS");}}

@@ -1,0 +1,1 @@
+public class SelfCheck { public static void main(String[] a) { if (!Main.canRetry("POST","k")||Main.canRetry("POST","")||!Main.canRetry("GET",null)) throw new AssertionError(); System.out.println("PASS"); } }

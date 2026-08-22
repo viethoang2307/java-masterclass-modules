@@ -1,0 +1,1 @@
+public class Main{public static boolean valid(String s){if(s==null||s.isBlank())return false;int at=s.indexOf('@');return at>0&&at==s.lastIndexOf('@')&&at<s.length()-1&&!s.substring(at+1).isBlank();}}

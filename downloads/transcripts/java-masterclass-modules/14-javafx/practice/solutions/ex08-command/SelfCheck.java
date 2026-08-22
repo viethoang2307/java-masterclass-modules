@@ -1,0 +1,1 @@
+public class SelfCheck{public static void main(String[]a){if(!"SAVE".equals(Main.command("CTRL+S"))||!"DELETE".equals(Main.command("DELETE"))||!"NONE".equals(Main.command("X")))throw new AssertionError();System.out.println("PASS");}}
